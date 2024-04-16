@@ -4,7 +4,7 @@
 | UWA ID    | Name           | GitHub Username   |
 |-----------|----------------|-------------------|
 | 23186998 | Carson Wolff | @cwolff13 |
-| ID2 | Member 2 | @githubuser2 |
+| 23757264 | Duc Long Tran| @longtrann |
 | ID3 | Member 3 | @githubuser3 |
 | ID4 | Member 4 | @githubuser4 |
 
