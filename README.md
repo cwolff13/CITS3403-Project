@@ -5,7 +5,7 @@
 |-----------|----------------|-------------------|
 | 23186998 | Carson Wolff | @cwolff13 |
 | 23757264 | Duc Long Tran| @longtrann |
-| ID3 | Member 3 | @githubuser3 |
+| 23169267  | Kaoma Kabange | @kaomakabange |
 | ID4 | Member 4 | @githubuser4 |
 
 ## Project Description
