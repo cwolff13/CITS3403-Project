@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Catch em</title>
+
+<link rel="stylesheet" href="../styles.css">
+<link rel="stylesheet" href="catchingstyle.css">
+
+</head>
+<body>
+ <!-- Filler Navigation Bar. -->   
+<nav id="navbar">
+    <ul>
+        <li><a href="#home">Home</a></li>
+        <li><a href="#summon">Summon</a></li>
+        <li><a href="#about">Trading</a></li>
+        <li><a href="#contact">Profile</a></li>
+        </ul>
+</nav>
+ 
+<!--Count for currency used to "catch" pokemon. -->  
+<div id="pokeballcount">
+    <h1> Remaining Pokeballs: 1</h1>
+</div>
+
+<!-- Image with button inside -->  
+<div id="summonBox">
+    <img id="summonBoxImage" src="../wallpaper.jpg" width="1000" height="600">
+    <button id="pokeball" onclick="summonPokemon()">
+        <img src="../pokeball.png" width="250" height="250">
+    </button>
+</div>
+
+<script src="catchingscript.js"></script>
+</body>
+</html>
