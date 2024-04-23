@@ -1,6 +1,10 @@
 console.log("hello world");
 
 
+document.getElementById('get-started').addEventListener('click', function() {
+    document.querySelector('.login').classList.toggle('none');
+});
+
 /*===== LOGIN SHOW and HIDDEN =====*/
 const signUp = document.getElementById('sign-up'),
     signIn = document.getElementById('sign-in'),
