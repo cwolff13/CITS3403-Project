@@ -28,9 +28,17 @@
 <!-- Image with button inside -->  
 <div id="summonBox">
     <img id="summonBoxImage" src="../images/pokemonwallpaper.jpg" width="1000" height="600">
-    <button id="pokeball" onclick="summonPokemon()">
+    <button id="pokeball" onclick="summonPokemon(event)">
         <img src="../images/pokeball.png" width="250" height="250">
     </button>
+    <!--Custom display box to show returned pokemon-->
+    <div id="pokemonModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <p id="pokemonName"></p>
+            <img id="pokemonImage" src="" alt="Random Pokémon">
+        </div>
+    </div>
 </div>
 
 <script src="catchingscript.js"></script>
