@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../styles.css">
+    <title>Pokemon Trading Page</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f9f9f9;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+        }
+        h1, h2, h3 {
+            text-align: center;
+        }
+        .trade-post {
+            padding: 20px;
+            background-color: #f5f5f5;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+        .pokemon-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); /* Flexible grid layout */
+            gap: 20px;
+        }
+        .pokemon-box {
+            padding: 10px;
+            border: 1px solid #ddd; /* Border style */
+            border-radius: 8px;
+            text-align: center;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+            width: 120px; /* Set fixed width for each box */
+            height: 120px; /* Set fixed height to maintain square shape */
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+        .pokemon-box:hover {
+            transform: translateY(-5px);
+        }
+        .pokemon-img {
+            max-width: 80px; /* Limit max width of the Pokemon image */
+            max-height: 80px; /* Limit max height of the Pokemon image */
+            width: auto;
+            height: auto;
+        }
+        .pokemon-name {
+            font-weight: bold;
+            font-size: 14px;
+        }
+        .user-name {
+            font-style: italic;
+            color: #888;
+            font-size: 12px;
+        }
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 1;
+            justify-content: center;
+            align-items: center;
+        }
+        .modal-content {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+        }
+        .modal-buttons {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Pokemon Trading Page</h1>
+
+        <!-- Trade Posting Section -->
+        <div class="trade-post">
+            <h2>Post a Trade Request</h2>
+            <form id="trade-form">
+                <label for="selected-pokemon">Pokemon for Trade:</label>
+                <input type="text" id="selected-pokemon" name="selected-pokemon" placeholder="Enter Pokemon Name">
+                <button type="submit">Post Trade</button>
+            </form>
+        </div>
+
+        <!-- Available Pokemon for Trading -->
+        <h2>Available Pokemon for Trading</h2>
+        <div class="pokemon-grid">
+            <!-- Example Pokemon Boxes (Replace with dynamic data from backend) -->
+            <div class="pokemon-box" onclick="openTradeConfirmation('Pikachu', 'User 1')">
+                <img src="https://img.pokemondb.net/artwork/pikachu.jpg" alt="Pikachu" class="pokemon-img">
+                <p class="pokemon-name">Pikachu</p>
+                <p class="user-name">User 1</p>
+            </div>
+            <div class="pokemon-box" onclick="openTradeConfirmation('Charmander', 'User 2')">
+                <img src="https://img.pokemondb.net/artwork/charmander.jpg" alt="Charmander" class="pokemon-img">
+                <p class="pokemon-name">Charmander</p>
+                <p class="user-name">User 2</p>
+            </div>
+            <div class="pokemon-box" onclick="openTradeConfirmation('Bulbasaur', 'User 3')">
+                <img src="https://img.pokemondb.net/artwork/bulbasaur.jpg" alt="Bulbasaur" class="pokemon-img">
+                <p class="pokemon-name">Bulbasaur</p>
+                <p class="user-name">User 3</p>
+            </div>
+            <div class="pokemon-box" onclick="openTradeConfirmation('Eevee', 'User 4')">
+                <img src="https://img.pokemondb.net/artwork/eevee.jpg" alt="Eevee" class="pokemon-img">
+                <p class="pokemon-name">Eevee</p>
+                <p class="user-name">User 4</p>
+            </div>
+        </div>
+
+        <!-- Trade Confirmation Modal -->
+        <div id="tradeModal" class="modal">
+            <div class="modal-content">
+                <h2>Confirm Trade</h2>
+                <p id="tradeDetails"></p>
+                <div class="modal-buttons">
+                    <button onclick="confirmTrade()">Confirm Trade</button>
+                    <button onclick="closeTradeConfirmation()">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentPokemon = '';
+
+        function openTradeConfirmation(pokemonName, userName) {
+            currentPokemon = pokemonName;
+            document.getElementById('tradeDetails').textContent = `Trade ${pokemonName} with ${userName}?`;
+            document.getElementById('tradeModal').style.display = 'flex';
+        }
+
+        function closeTradeConfirmation() {
+            document.getElementById('tradeModal').style.display = 'none';
+        }
+
+        function confirmTrade() {
+            // Perform trade logic here (e.g., submit trade request)
+            alert(`Trade confirmed for ${currentPokemon}!`);
+            closeTradeConfirmation();
+        }
+    </script>
+</body>
+</html>
