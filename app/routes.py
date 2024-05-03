@@ -21,7 +21,3 @@ def profile():
 @app.route('/inventory')
 def inventory():
     return render_template('profile/inventory.html')
-
-@app.route('/project-trading')
-def projectTrading():
-    return render_template('profile/projectTrading.html')
