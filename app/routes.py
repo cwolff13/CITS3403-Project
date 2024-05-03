@@ -13,3 +13,15 @@ def catching():
 @app.route('/trading')
 def trading():
     return render_template('trading.html')
+
+@app.route('/profile')
+def profile():
+    return render_template('profile/profileManagement.html')
+
+@app.route('/inventory')
+def inventory():
+    return render_template('profile/inventory.html')
+
+@app.route('/project-trading')
+def projectTrading():
+    return render_template('profile/projectTrading.html')
