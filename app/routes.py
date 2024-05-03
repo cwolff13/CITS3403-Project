@@ -9,3 +9,7 @@ def login():
 @app.route('/catching')
 def catching():
     return render_template('catching.html')
+
+@app.route('/trading')
+def trading():
+    return render_template('trading.html')
