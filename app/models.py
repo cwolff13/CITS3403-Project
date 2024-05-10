@@ -7,6 +7,8 @@ import os
 import sqlalchemy as sa
 import sqlalchemy.orm as so
 from .db import db
+from werkzeug.security import generate_password_hash, check_password_hash
+
 
 class Pokemon(db.Model):
     id: so.Mapped[int] = so.mapped_column(primary_key=True)
@@ -132,19 +134,25 @@ class Inventory(db.Model):
 
         # Commit changes to the database
         db.session.commit()
-        
+
+# The User table is responsible for managing User attributes. 
 class User(db.Model):
     __tablename__ = 'user'
     user_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     username = db.Column(db.String(50), nullable=False, unique=True)
-    password = db.Column(db.String(100), nullable=False)
+    password_hash = db.Column(db.String(100), nullable=False)
     email = db.Column(db.String(100), nullable=False, unique=True)
-
-    # Relationship to the Inventory table 
+ 
     inventory_items = db.relationship('Inventory', back_populates='owner', cascade="all, delete-orphan")
 
     def __repr__(self):
         return f"<User(user_id={self.user_id}, username={self.username}, email={self.email})>"
+    
+    def set_password(self, password):
+        self.password_hash = generate_password_hash(password)
+    
+    def check_password(self, password):
+        return check_password_hash(self.password_hash, password)
 
 
 def initialise_database(): # Need to rewrite to instead check integrity of database rather than exsistence.
