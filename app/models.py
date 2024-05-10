@@ -66,7 +66,18 @@ class Trading(db.Model):
         def __repr__(self):
                 return f'<{self.user_name} {self.pokemon_trade_in.name} {self.pokemon_trade_out.name}>'
         
-
+       
+        def add_trade(cls, user_name, pokemon_trade_in_id, pokemon_trade_out_id):
+            new_trade = cls(user_name=user_name, pokemon_trade_in_id=pokemon_trade_in_id, pokemon_trade_out_id=pokemon_trade_out_id)
+            db.session.add(new_trade)   
+            db.session.commit() 
+            
+        def find_pokemon_id(cls, pokemon_name):
+            pokemon = Pokemon.query.filter_by(name=pokemon_name).first()
+            if pokemon:
+                return pokemon.id
+            else:
+                return None
 #Many to many mapping intermediate table
 
 inventory_pokemon_association = db.Table('inventory_pokemon',
