@@ -37,6 +37,12 @@ def signup():
 
     return render_template('login.html')
 
+@app.route('/logout')
+def logout():
+    logout_user()
+    return render_template('login.html')
+
+
 @app.route('/catching')
 @login_required
 def catching():
