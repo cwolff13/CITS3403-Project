@@ -1,9 +1,30 @@
-from flask import render_template
-from app import app
+from flask import render_template, request, redirect, url_for, flash
+from app import app, db
+from app.models import User
 
 @app.route('/')
 @app.route('/login', methods=['GET', 'POST'])
 def login():
+    return render_template('login.html')
+
+@app.route('/signup', methods=['GET', 'POST'])
+def signup():
+    if request.method == 'POST':
+        username = request.form['username']
+        email = request.form['email']
+        password = request.form['password']
+
+        user_exists = User.query.filter((User.username == username) | (User.email == email)).first()
+        if user_exists:
+            flash('Username or email already taken')
+        else:
+            new_user = User(username=username, email=email)
+            new_user.set_password(password)
+            db.session.add(new_user)
+            db.session.commit()
+            flash('User Created Successfully.')
+            return redirect(url_for('catching'))
+
     return render_template('login.html')
 
 @app.route('/catching')
