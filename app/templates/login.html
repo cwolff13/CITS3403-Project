@@ -11,6 +11,17 @@
         <title>Login and Landing Page</title>
     </head>
     <body>
+        <div class="flash-messages">
+            {% with messages = get_flashed_messages() %}
+                {% if messages %}
+                    {% for message in messages %}
+                        <div class="flash-message">
+                            <p>{{ message }}</p>
+                        </div>
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}
+        </div>
         <div class="welcome">
             <h1>Welcome to Our Amazing Platform</h1>
             <p>Click the button below to get started!</p>
@@ -23,22 +34,22 @@
                 <div class="login__img"></div>
 
                 <div class="login__forms">
-                    <form action="" class="login__register" id="login-in">
+                    <form action="/login" method="POST" class="login__register" id="login-in">
                         <h1 class="login__title">Sign In</h1>
     
                         <div class="login__box">
                             <i class='bx bx-user login__icon'></i>
-                            <input type="text" placeholder="Username" class="login__input">
+                            <input type="text" name="username" placeholder="Username" class="login__input" required>
                         </div>
     
                         <div class="login__box">
                             <i class='bx bx-lock-alt login__icon'></i>
-                            <input type="password" placeholder="Password" class="login__input">
+                            <input type="password" name="password" placeholder="Password" class="login__input" required>
                         </div>
 
                         <a href="#" class="login__forgot">Forgot password?</a>
 
-                        <a href="#" class="login__button">Sign In</a>
+                        <button type="submit" class="login__button">Sign In</button>
 
                         <div>
                             <span class="login__account">Don't have an Account ?</span>
@@ -46,25 +57,25 @@
                         </div>
                     </form>
 
-                    <form action="" class="login__create none" id="login-up">
+                    <form action="/signup" method="POST" class="login__create none" id="login-up">
                         <h1 class="login__title">Create Account</h1>
     
                         <div class="login__box">
                             <i class='bx bx-user login__icon'></i>
-                            <input type="text" placeholder="Username" class="login__input">
+                            <input type="text" name="username" placeholder="Username" class="login__input" required>
                         </div>
     
                         <div class="login__box">
                             <i class='bx bx-at login__icon'></i>
-                            <input type="text" placeholder="Email" class="login__input">
+                            <input type="text" name="email" placeholder="Email" class="login__input" required>
                         </div>
 
                         <div class="login__box">
                             <i class='bx bx-lock-alt login__icon'></i>
-                            <input type="password" placeholder="Password" class="login__input">
+                            <input type="password" name="password" placeholder="Password" class="login__input" required>
                         </div>
 
-                        <a href="#" class="login__button">Sign Up</a>
+                        <button type="submit" class="login__button">Sign Up</button>
 
                         <div>
                             <span class="login__account">Already have an Account ?</span>
