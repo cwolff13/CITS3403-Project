@@ -8,7 +8,8 @@ import sqlalchemy as sa
 import sqlalchemy.orm as so
 from .db import db
 from werkzeug.security import generate_password_hash, check_password_hash
-
+from flask_login import UserMixin
+from app import login
 
 class Pokemon(db.Model):
     id: so.Mapped[int] = so.mapped_column(primary_key=True)
@@ -136,7 +137,7 @@ class Inventory(db.Model):
         db.session.commit()
 
 # The User table is responsible for managing User attributes. 
-class User(db.Model):
+class User(UserMixin, db.Model):
     __tablename__ = 'user'
     user_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     username = db.Column(db.String(50), nullable=False, unique=True)
@@ -153,6 +154,14 @@ class User(db.Model):
     
     def check_password(self, password):
         return check_password_hash(self.password_hash, password)
+    
+    # helper function to allow flask login to get the user ID
+    def get_id(self):
+        return str(self.user_id)
+
+@login.user_loader
+def load_user(id):
+    return db.session.get(User, int(id))
 
 
 def initialise_database(): # Need to rewrite to instead check integrity of database rather than exsistence.
