@@ -139,25 +139,39 @@ class Inventory(db.Model):
         db.session.commit()
     
     def remove_pokemon(self, pokemon_id: int):
-        # Query the association table for existing record
-        association = db.session.query(inventory_pokemon_association).filter_by(
-            inventory_id=self.inventory_id,
-            pokemon_id=pokemon_id
-        ).first()
-
-        if association:
-            if association.quantity > 1:
-                # Decrement the quantity if more than one
-                association.quantity -= 1
-            else:
-                # Remove the association entirely if quantity is one
-                db.session.delete(association)
-        else:
-            # Handle the case where the Pokémon does not exist in the inventory
-            print(f"No such Pokémon (ID: {pokemon_id}) in the inventory to remove.")
-
-        # Commit changes to the database
-        db.session.commit()
+        try:
+            existing_association = db.session.execute(
+            sa.select(inventory_pokemon_association).where(
+                inventory_pokemon_association.c.inventory_id == self.inventory_id,
+                inventory_pokemon_association.c.pokemon_id == pokemon_id
+            )
+            ).fetchone()
+            print("test1")
+           
+            if existing_association:
+                current_quantity = existing_association[2]
+                print(f"Successfully fetched. Current quantity: {current_quantity}")
+                if current_quantity > 1:
+                    db.session.execute(
+                        inventory_pokemon_association.update().where(
+                            sa.and_(
+                                inventory_pokemon_association.c.inventory_id == self.inventory_id,
+                                inventory_pokemon_association.c.pokemon_id == pokemon_id
+                            )
+                        ).values(quantity=current_quantity - 1)
+                    )
+                elif current_quantity == 1:
+                    db.session.execute(
+                        sa.delete(inventory_pokemon_association).where(
+                            sa.and_(
+                                inventory_pokemon_association.c.inventory_id == self.inventory_id,
+                                inventory_pokemon_association.c.pokemon_id == pokemon_id
+                            )
+                        )
+                    )
+                db.session.commit()
+        except Exception as e:
+            print(f"Error during fetch: {e}")
         
 class User(db.Model):
     __tablename__ = 'user'

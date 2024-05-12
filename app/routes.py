@@ -15,7 +15,7 @@ def catching():
 
 @app.route('/trading', methods=['GET', 'POST', 'DELETE'])
 def trading():
-    current_user = User.query.filter_by(username="chip").first()
+    current_user = User.query.filter_by(username="dvLong").first()
     trading_data = Trading.query.all()
     current_user_inventory = Inventory.query.filter_by(user_id=current_user.user_id).first()
     current_user_pokemon = current_user_inventory.pokemon_items
@@ -55,11 +55,11 @@ def trading():
         
         user_inventory.add_pokemon(pokemon_trade_in)
         
-        user_inventory.remove_pokemon(pokemon_trade_out)
+        current_user_inventory.remove_pokemon(pokemon_trade_in)   
         
         current_user_inventory.add_pokemon(pokemon_trade_out)
-
-        current_user_inventory.remove_pokemon(pokemon_trade_in)   
+        
+        user_inventory.remove_pokemon(pokemon_trade_out)
         
         Trading.delete_trade(trade_id)
         
