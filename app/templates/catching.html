@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Catch em</title>
-
+<script src="{{ url_for('static', filename='/catching/catchingscript.js') }}"></script>
 
 <link rel="stylesheet" href="{{ url_for('static', filename='/catching/catchingstyle.css') }}">
 
@@ -22,7 +22,7 @@
  
 <!--Count for currency used to "catch" pokemon. -->  
 <div id="pokeballcount">
-    <h1> Remaining Pokeballs: 1</h1>
+    <h1>Remaining Pokeballs: {{ pokeball_count }}</h1>
 </div>
 
 <!-- Image with button inside -->  
@@ -36,11 +36,9 @@
         <div class="modal-content">
             <span class="close">&times;</span>
             <p id="pokemonName"></p>
-            <img id="pokemonImage" src="" alt="Random Pokémon">
+            <img id="pokemonImage" src="" alt="Random Pokémon" width="500" height="500">
         </div>
     </div>
 </div>
-
-<script src="{{ url_for('static', filename='/catching/catchingscript.js') }}"></script>
 </body>
 </html>
