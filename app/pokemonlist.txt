@@ -119,7 +119,7 @@
 119,Seaking,images/pokemonImages/Seaking.jpg
 120,Staryu,images/pokemonImages/Staryu.jpg
 121,Starmie,images/pokemonImages/Starmie.jpg
-122,Mr. Mime,images/pokemonImages/Mr. Mime.jpg
+122,Mr.Mime,images/pokemonImages/Mr.Mime.jpg
 123,Scyther,images/pokemonImages/Scyther.jpg
 124,Jynx,images/pokemonImages/Jynx.jpg
 125,Electabuzz,images/pokemonImages/Electabuzz.jpg

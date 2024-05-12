@@ -46,7 +46,8 @@ class Pokemon(db.Model):
 
 #Long's Trading table
 class Trading(db.Model): 
-        user_name:str = db.Column(db.String(100), primary_key = True)
+        id:int = db.Column(db.Integer, primary_key=True, autoincrement=True) 
+        user_name:str = db.Column(db.String(100), unique=False)
 
         '''
         Takes a pokemon object represented as the pokemon's ID.
@@ -56,8 +57,8 @@ class Trading(db.Model):
         - pokemon_trade_in is a relational map to the Pokemon object.
         Therefore it can be used like trading_instance.pokemon_trade_in.name to get the pokemon's name without a separate query
         '''
-        pokemon_trade_in_id = db.Column(db.Integer, db.ForeignKey('pokemon.id'), nullable=False)  
-        pokemon_trade_out_id = db.Column(db.Integer, db.ForeignKey('pokemon.id'), nullable=False)
+        pokemon_trade_in_id = db.Column(db.Integer, db.ForeignKey('pokemon.id'), nullable=False, unique=False) 
+        pokemon_trade_out_id = db.Column(db.Integer, db.ForeignKey('pokemon.id'), nullable=False, unique=False)
         
         #Defines the relationship to Pokemon table
         pokemon_trade_in = db.relationship('Pokemon', foreign_keys=[pokemon_trade_in_id])
@@ -66,18 +67,26 @@ class Trading(db.Model):
         def __repr__(self):
                 return f'<{self.user_name} {self.pokemon_trade_in.name} {self.pokemon_trade_out.name}>'
         
-       
+        @classmethod
         def add_trade(cls, user_name, pokemon_trade_in_id, pokemon_trade_out_id):
             new_trade = cls(user_name=user_name, pokemon_trade_in_id=pokemon_trade_in_id, pokemon_trade_out_id=pokemon_trade_out_id)
             db.session.add(new_trade)   
             db.session.commit() 
             
+        @classmethod
         def find_pokemon_id(cls, pokemon_name):
             pokemon = Pokemon.query.filter_by(name=pokemon_name).first()
             if pokemon:
                 return pokemon.id
             else:
                 return None
+        
+        @classmethod
+        def delete_trade(cls, trade_id):
+            trade = cls.query.get(trade_id)
+            if trade:
+                db.session.delete(trade)
+                db.session.commit()
 #Many to many mapping intermediate table
 
 inventory_pokemon_association = db.Table('inventory_pokemon',
@@ -102,25 +111,31 @@ class Inventory(db.Model):
         return f"<Inventory(inventory_id={self.inventory_id}, user_id={self.user_id})"   
    
     def add_pokemon(self, pokemon_id: int):
-        # Query the association table for existing record
-        association = db.session.query(inventory_pokemon_association).filter_by(
-            inventory_id=self.inventory_id,
-            pokemon_id=pokemon_id
-        ).first()
-
-        if association:
+        # Direct SQL statement to increment quantity or insert a new row if not exists
+        existing_association = db.session.execute(
+            sa.select(inventory_pokemon_association).where(
+                inventory_pokemon_association.c.inventory_id == self.inventory_id,
+                inventory_pokemon_association.c.pokemon_id == pokemon_id
+            )
+        ).fetchone()
+ 
+        if existing_association:
             # If the Pokémon is already in the inventory, increment the quantity
-            association.quantity += 1
+            db.session.execute(
+                inventory_pokemon_association.update().where(
+                    inventory_pokemon_association.c.inventory_id == self.inventory_id,
+                    inventory_pokemon_association.c.pokemon_id == pokemon_id
+                ).values(quantity=inventory_pokemon_association.c.quantity + 1)
+            )
         else:
             # If not present, add a new entry to the association table
-            new_association = inventory_pokemon_association.insert().values(
-                inventory_id=self.inventory_id,
-                pokemon_id=pokemon_id,
-                quantity=1
+            db.session.execute(
+                inventory_pokemon_association.insert().values(
+                    inventory_id=self.inventory_id,
+                    pokemon_id=pokemon_id,
+                    quantity=1
+                )
             )
-            db.session.execute(new_association)
-
-        # Commit changes to the database
         db.session.commit()
     
     def remove_pokemon(self, pokemon_id: int):
@@ -203,8 +218,39 @@ def initialise_database(): # Need to rewrite to instead check integrity of datab
         for i in pokemon_list:
             print(i.name)
     """
-            
+    
+    # user1 = User(username="dvLong", password="456", email="long123asd@gmail.com")
+    # db.session.add(user1)    
+    # db.session.commit()
 
+    # inventory1 = Inventory(owner=user1)
+    # db.session.add(inventory1)
+    # db.session.commit()
+    
+    # inventory1 = Inventory.query.filter_by(user_id=1).first()
+    # inventory1.add_pokemon(1)
+    # inventory1.add_pokemon(2)
+    # inventory1.add_pokemon(3)
+    # inventory1.add_pokemon(4)
+    # inventory1.add_pokemon(5)
 
+    # db.session.commit()
+
+    # user2 = User(username="chip", password="123", email="chip123asd@gmail.com")
+    # db.session.add(user2)    
+    # db.session.commit()
+
+    # inventory2 = Inventory(owner=user2)
+    # db.session.add(inventory2)
+    # db.session.commit()
+    
+    # inventory2 = Inventory.query.filter_by(user_id=2).first()
+    # inventory2.add_pokemon(5)
+    # inventory2.add_pokemon(6)
+    # inventory2.add_pokemon(7)
+    # inventory2.add_pokemon(8)
+
+    # db.session.commit()
+  
         
         
