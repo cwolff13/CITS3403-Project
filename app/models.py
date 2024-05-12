@@ -146,7 +146,6 @@ class Inventory(db.Model):
                 inventory_pokemon_association.c.pokemon_id == pokemon_id
             )
             ).fetchone()
-            print("test1")
            
             if existing_association:
                 current_quantity = existing_association[2]
