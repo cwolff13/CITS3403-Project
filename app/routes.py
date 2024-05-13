@@ -29,7 +29,7 @@ def signup():
         if user_exists:
             flash('Username or email already taken')
         else:
-            new_user = User(username=username, email=email)
+            new_user = User(username=username, email=email, pokeballs=5) # more advanced logic can be added time permitting.
             new_user.set_password(password)
             db.session.add(new_user)
             db.session.commit()
@@ -46,27 +46,30 @@ def logout():
 
 @app.route('/catching')
 def catching():
-    current_user = User.query.filter_by(user_id = 1).first() # Hardcoded user for testing.
     pokeball_count = current_user.pokeballs
     return render_template('catching.html', pokeball_count=pokeball_count)
 
 @app.route('/catching-pokemon', methods=['POST'])
+@login_required
 def catching_pokemon():
-    current_user_ID = request.json.get('user_id')
-    current_user = User.query.filter_by(user_id = current_user_ID).first()
-
-    if not current_user: 
-        return jsonify({'success': False, 'message': 'User not found'})
-
     if current_user.pokeballs < 1:
         return jsonify({'success': False, 'message': 'Not enough Pokeballs'})
-    
-    current_user.deduct_pokeball()
-    pokemon_id = random.randint(1,151)
-    pokemon = Pokemon.query.filter_by(id = pokemon_id).first()
-    pokeballcount = current_user.pokeballs
 
-    user_inventory = Inventory.query.filter_by(user_id = current_user_ID).first()
+    current_user.deduct_pokeball()
+    pokemon_id = random.randint(1, 151)
+    pokemon = Pokemon.query.filter_by(id=pokemon_id).first()
+
+    if not pokemon:
+        return jsonify({'success': False, 'message': 'Pokemon not found'})
+
+    # Ensure user has an inventory to add Pokémon to
+    user_inventory = Inventory.query.filter_by(user_id=current_user.user_id).first()
+    if not user_inventory:
+        user_inventory = Inventory(user_id=current_user.user_id)
+        db.session.add(user_inventory)
+        db.session.commit()  # Make sure to commit so the ID is generated
+
+    # Now add the Pokémon to the inventory
     user_inventory.add_pokemon(pokemon_id)
 
     db.session.commit()
@@ -74,7 +77,7 @@ def catching_pokemon():
     return jsonify({
         'success': True,
         'pokemon': {'name': pokemon.name, 'image': pokemon.poke_url},
-        'newPokeballCount': pokeballcount
+        'newPokeballCount': current_user.pokeballs
     })
 
 @app.route('/trading', methods=['GET', 'POST', 'DELETE'])
