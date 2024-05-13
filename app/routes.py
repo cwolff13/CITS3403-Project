@@ -45,12 +45,13 @@ def logout():
 
 
 @app.route('/catching')
+#@login_required
 def catching():
     pokeball_count = current_user.pokeballs
-    return render_template('catching.html', pokeball_count=pokeball_count)
+    return render_template('catching.html', pokeball_count=pokeball_count )
 
 @app.route('/catching-pokemon', methods=['POST'])
-@login_required
+#@login_required
 def catching_pokemon():
     if current_user.pokeballs < 1:
         return jsonify({'success': False, 'message': 'Not enough Pokeballs'})
@@ -81,9 +82,9 @@ def catching_pokemon():
     })
 
 @app.route('/trading', methods=['GET', 'POST', 'DELETE'])
-@login_required
+#@login_required
 def trading():
-    current_user = User.query.filter_by(username="dvLong").first()
+    current_user = User.query.filter_by(username="long").first()
     trading_data = Trading.query.all()
     current_user_inventory = Inventory.query.filter_by(user_id=current_user.user_id).first()
     current_user_pokemon = current_user_inventory.pokemon_items
@@ -144,11 +145,31 @@ def trading():
         return render_template('trading.html', trading_data=trading_data, current_user_pokemon = current_user_pokemon, all_pokemon = all_pokemon, Pokemon = Pokemon)
     
 @app.route('/profile')
-@login_required
+#@login_required
 def profile():
     return render_template('profile/profileManagement.html')
 
+# @app.route('/inventory')
+# @login_required
+# def inventory():
+#     return render_template('profile/inventory.html')
+
+# newly added:
+
 @app.route('/inventory')
-@login_required
-def inventory():
-    return render_template('profile/inventory.html')
+#@login_required
+def user_inventory():
+    # Assuming "kaoma" is uniquely identified by username or another identifier
+    user = User.query.filter_by(username="long").first()
+    if user:
+        inventory = Inventory.query.filter_by(user_id=user.user_id).first()
+        inventory_pokemon = inventory.pokemon_items if inventory else []
+    else:
+        inventory_pokemon = []
+
+    return render_template('/profile/inventory.html', inventory_pokemon=inventory_pokemon)
+
+
+
+
+
