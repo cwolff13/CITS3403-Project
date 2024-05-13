@@ -7,6 +7,9 @@ import os
 import sqlalchemy as sa
 import sqlalchemy.orm as so
 from .db import db
+from werkzeug.security import generate_password_hash, check_password_hash
+from flask_login import UserMixin
+from app import login
 
 class Pokemon(db.Model):
     id: so.Mapped[int] = so.mapped_column(primary_key=True)
@@ -89,6 +92,7 @@ class Trading(db.Model):
                 db.session.commit()
 #Many to many mapping intermediate table
 
+
 inventory_pokemon_association = db.Table('inventory_pokemon',
     db.Column('inventory_id', db.Integer, db.ForeignKey('inventory.inventory_id'), primary_key=True), 
     db.Column('pokemon_id', db.Integer, db.ForeignKey('pokemon.id'), primary_key=True), 
@@ -109,7 +113,7 @@ class Inventory(db.Model):
 
     def __repr__(self):
         return f"<Inventory(inventory_id={self.inventory_id}, user_id={self.user_id})"   
-   
+
     def add_pokemon(self, pokemon_id: int):
         # Direct SQL statement to increment quantity or insert a new row if not exists
         existing_association = db.session.execute(
@@ -118,7 +122,6 @@ class Inventory(db.Model):
                 inventory_pokemon_association.c.pokemon_id == pokemon_id
             )
         ).fetchone()
- 
         if existing_association:
             # If the Pokémon is already in the inventory, increment the quantity
             db.session.execute(
@@ -137,7 +140,7 @@ class Inventory(db.Model):
                 )
             )
         db.session.commit()
-    
+
     def remove_pokemon(self, pokemon_id: int):
         try:
             existing_association = db.session.execute(
@@ -146,7 +149,6 @@ class Inventory(db.Model):
                 inventory_pokemon_association.c.pokemon_id == pokemon_id
             )
             ).fetchone()
-           
             if existing_association:
                 current_quantity = existing_association[2]
                 print(f"Successfully fetched. Current quantity: {current_quantity}")
@@ -171,70 +173,99 @@ class Inventory(db.Model):
                 db.session.commit()
         except Exception as e:
             print(f"Error during fetch: {e}")
-        
-class User(db.Model):
+
+# The User table is responsible for managing User attributes. 
+class User(UserMixin, db.Model):
     __tablename__ = 'user'
     user_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     username = db.Column(db.String(50), nullable=False, unique=True)
-    password = db.Column(db.String(100), nullable=False)
+    password_hash = db.Column(db.String(100), nullable=False)
     email = db.Column(db.String(100), nullable=False, unique=True)
+    pokeballs = db.Column(db.Integer)
 
-    # Relationship to the Inventory table 
     inventory_items = db.relationship('Inventory', back_populates='owner', cascade="all, delete-orphan")
 
     def __repr__(self):
-        return f"<User(user_id={self.user_id}, username={self.username}, email={self.email})>"
+        return f"<User(user_id={self.user_id}, username={self.username}, email={self.email}, pokeballs = {self.pokeballs})>"
+    
+    def set_password(self, password):
+        self.password_hash = generate_password_hash(password)
+    
+    def check_password(self, password):
+        return check_password_hash(self.password_hash, password)
+    
+    # helper function to allow flask login to get the user ID
+    def get_id(self):
+        return str(self.user_id)
+
+    def deduct_pokeball(self):
+        if self.pokeballs > 0:
+            self.pokeballs -= 1
+            db.session.commit()
+            return True
+        return False   
+    
+@login.user_loader
+def load_user(id):
+    return db.session.get(User, int(id))
 
 
 def initialise_database(): # Need to rewrite to instead check integrity of database rather than exsistence.
     if not os.path.exists('app.db'): #Checks to see if the database already exsists, Only runs if the database hasn't already been created. 
         db.create_all() #May need to adjust depending on format of other databases.
         Pokemon.populate_database()
-    """
-        #For testing
-        user1 = User(username="raymonreddington", password="UWA@", email="kaomak@pokeball.com")
-        user2 = User(username="lizziekeen", password="FB@2024", email="lizzie@pokeball.com")
-
-        db.session.add(user1)
-        db.session.add(user2)
-        db.session.commit()
-
-        inventory1 = Inventory(owner=user1)
-        inventory2 = Inventory(owner=user2)
-        db.session.add(inventory1)
-        db.session.add(inventory2)
-        db.session.commit()
-
-        inventory1 = Inventory.query.filter_by(user_id=1).first()
-        inventory1.add_pokemon(1)
-        inventory1.add_pokemon(2)
-
-        inventory2 = Inventory.query.filter_by(user_id=2).first()
-        inventory2.add_pokemon(3)
-        inventory2.add_pokemon(4)
-
-        trading1 = Trading(user_name = "raymonreddington", pokemon_trade_in_id = 1, pokemon_trade_out_id = 7)
-        db.session.add(trading1)
-        db.session.commit()
-
-        print(trading1.user_name,trading1.pokemon_trade_in_id,trading1.pokemon_trade_out_id)
-
-        pokemon3 = Pokemon.query.get(3)
-        print(pokemon3.name)
-
-        pokemon4 = Pokemon.query.filter_by(name = "Bulbasaur").first()
-        print(pokemon4)
-
-        print(user1.username)
-
-        pokemon_list = inventory1.pokemon_items
-        for i in pokemon_list:
-            print(i.name)
-    """
     
-    # user1 = User(username="dvLong", password="456", email="long123asd@gmail.com")
+        #For testing
+
+#         user1 = User(username="raymonreddington", password_hash="UWA@", email="kaomak@pokeball.com",pokeballs=99)
+#         user2 = User(username="lizziekeen", password_hash="FB@2024", email="lizzie@pokeball.com",pokeballs=10)
+
+#         db.session.add(user1)
+#         db.session.add(user2)
+#         db.session.commit()
+
+        #print(User.query.filter_by(user_id=1).first())
+#         db.session.add(Inventory(owner=User.query.filter_by(user_id=1).first()))
+#         db.session.commit()
+        #print(Inventory.query.filter_by(user_id=1).first())
+        
+#         inventory1 = Inventory(owner=user1)
+#         inventory2 = Inventory(owner=user2)
+#         db.session.add(inventory1)
+#         db.session.add(inventory2)
+#         db.session.commit()
+
+#         inventory1 = Inventory.query.filter_by(user_id=1).first()
+#         inventory1.add_pokemon(1)
+#         inventory1.add_pokemon(2)
+
+#         inventory2 = Inventory.query.filter_by(user_id=2).first()
+#         inventory2.add_pokemon(3)
+#         inventory2.add_pokemon(4)
+
+#         trading1 = Trading(user_name = "raymonreddington", pokemon_trade_in_id = 1, pokemon_trade_out_id = 7)
+#         db.session.add(trading1)
+#         db.session.commit()
+
+        #print(trading1.user_name,trading1.pokemon_trade_in_id,trading1.pokemon_trade_out_id)
+
+#         pokemon3 = Pokemon.query.get(3)
+        #print(pokemon3.name)
+
+#         pokemon4 = Pokemon.query.filter_by(name = "Bulbasaur").first()
+        #print(pokemon4)
+
+        #print(user1.username)
+
+#         pokemon_list = inventory1.pokemon_items
+#         print("Before Deletion: \n")
+#         for i in pokemon_list:
+#             print(i.name)
+    
+    # user1 = User(username="long", password="456", email="long123asd@gmail.com")
     # db.session.add(user1)    
     # db.session.commit()
+
 
     # inventory1 = Inventory(owner=user1)
     # db.session.add(inventory1)
@@ -249,7 +280,7 @@ def initialise_database(): # Need to rewrite to instead check integrity of datab
 
     # db.session.commit()
 
-    # user2 = User(username="chip", password="123", email="chip123asd@gmail.com")
+    # user2 = User(username="kaoma", password="123", email="kaoma@gmail.com")
     # db.session.add(user2)    
     # db.session.commit()
 

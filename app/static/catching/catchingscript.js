@@ -1,23 +1,36 @@
 function summonPokemon(event) {
     event.stopPropagation();
+    const userId = 1; // Hard-coded user ID for testing
 
-
-    const randomId = Math.floor(Math.random() * 151) + 1;
-    fetch(`https://pokeapi.co/api/v2/pokemon/${randomId}`)
-        .then(response => response.json())
-        .then(data => {
-            const pokemonName = data.name;
-            const pokemonImage = data.sprites.front_default;
-            document.getElementById('pokemonName').textContent = `You got ${pokemonName}!`;
-            document.getElementById('pokemonImage').src = pokemonImage;
-            document.getElementById('pokemonImage').alt = pokemonName;
-            showModal();
+    fetch('/catching-pokemon', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            user_id: userId  // Correctly structured JSON body
         })
-        .catch(error => {
-            alert('Failed to retrieve Pokémon data.');
-            console.error('Error:', error);
-        });
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            const pokemonName = data.pokemon.name;
+            const pokemonImage = data.pokemon.image;
+            document.getElementById('pokemonName').textContent = `You got ${pokemonName}!`;
+            document.getElementById('pokemonImage').src = "static/" + pokemonImage;
+            document.getElementById('pokemonImage').alt = pokemonName;
+            document.getElementById('pokeballcount').textContent = `Remaining Pokeballs: ${data.newPokeballCount}`;
+            showModal();
+        } else {
+            alert(data.message);
+        }
+    })
+    .catch(error => {
+        alert('Failed to communicate with the server.');
+        console.error('Error:', error);
+    });
 }
+
 
 function showModal() {
     const modal = document.getElementById('pokemonModal');
