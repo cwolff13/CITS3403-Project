@@ -26,10 +26,10 @@
 26,Raichu,images/pokemonImages/Raichu.jpg
 27,Sandshrew,images/pokemonImages/Sandshrew.jpg
 28,Sandslash,images/pokemonImages/Sandslash.jpg
-29,Nidoran♀,images/pokemonImages/Nidoran♀.jpg
+29,Nidoran♀,images/pokemonImages/Nidoran-f.jpg
 30,Nidorina,images/pokemonImages/Nidorina.jpg
 31,Nidoqueen,images/pokemonImages/Nidoqueen.jpg
-32,Nidoran♂,images/pokemonImages/Nidoran♂.jpg
+32,Nidoran♂,images/pokemonImages/Nidoran-m.jpg
 33,Nidorino,images/pokemonImages/Nidorino.jpg
 34,Nidoking,images/pokemonImages/Nidoking.jpg
 35,Clefairy,images/pokemonImages/Clefairy.jpg
@@ -80,7 +80,7 @@
 80,Slowbro,images/pokemonImages/Slowbro.jpg
 81,Magnemite,images/pokemonImages/Magnemite.jpg
 82,Magneton,images/pokemonImages/Magneton.jpg
-83,Farfetch’d,images/pokemonImages/Farfetch’d.jpg
+83,Farfetch’d,images/pokemonImages/farfetchd.jpg
 84,Doduo,images/pokemonImages/Doduo.jpg
 85,Dodrio,images/pokemonImages/Dodrio.jpg
 86,Seel,images/pokemonImages/Seel.jpg
@@ -119,7 +119,7 @@
 119,Seaking,images/pokemonImages/Seaking.jpg
 120,Staryu,images/pokemonImages/Staryu.jpg
 121,Starmie,images/pokemonImages/Starmie.jpg
-122,Mr. Mime,images/pokemonImages/Mr. Mime.jpg
+122,Mr. Mime,images/pokemonImages/Mr-Mime.jpg
 123,Scyther,images/pokemonImages/Scyther.jpg
 124,Jynx,images/pokemonImages/Jynx.jpg
 125,Electabuzz,images/pokemonImages/Electabuzz.jpg

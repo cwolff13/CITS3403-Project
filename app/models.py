@@ -72,6 +72,7 @@ class Trading(db.Model):
 
 #Many to many mapping intermediate table
 
+
 inventory_pokemon_association = db.Table('inventory_pokemon',
     db.Column('inventory_id', db.Integer, db.ForeignKey('inventory.inventory_id'), primary_key=True), 
     db.Column('pokemon_id', db.Integer, db.ForeignKey('pokemon.id'), primary_key=True), 
@@ -92,49 +93,70 @@ class Inventory(db.Model):
 
     def __repr__(self):
         return f"<Inventory(inventory_id={self.inventory_id}, user_id={self.user_id})"   
-   
-    def add_pokemon(self, pokemon_id: int):
-        # Query the association table for existing record
-        association = db.session.query(inventory_pokemon_association).filter_by(
-            inventory_id=self.inventory_id,
-            pokemon_id=pokemon_id
-        ).first()
 
-        if association:
+    def add_pokemon(self, pokemon_id: int):
+        # Direct SQL statement to increment quantity or insert a new row if not exists
+        existing_association = db.session.execute(
+            sa.select(inventory_pokemon_association).where(
+                inventory_pokemon_association.c.inventory_id == self.inventory_id,
+                inventory_pokemon_association.c.pokemon_id == pokemon_id
+            )
+        ).fetchone()
+
+        if existing_association:
             # If the Pokémon is already in the inventory, increment the quantity
-            association.quantity += 1
+            db.session.execute(
+                inventory_pokemon_association.update().where(
+                    inventory_pokemon_association.c.inventory_id == self.inventory_id,
+                    inventory_pokemon_association.c.pokemon_id == pokemon_id
+                ).values(quantity=inventory_pokemon_association.c.quantity + 1)
+            )
         else:
             # If not present, add a new entry to the association table
-            new_association = inventory_pokemon_association.insert().values(
-                inventory_id=self.inventory_id,
-                pokemon_id=pokemon_id,
-                quantity=1
+            db.session.execute(
+                inventory_pokemon_association.insert().values(
+                    inventory_id=self.inventory_id,
+                    pokemon_id=pokemon_id,
+                    quantity=1
+                )
             )
-            db.session.execute(new_association)
 
         # Commit changes to the database
         db.session.commit()
-    
+
     def remove_pokemon(self, pokemon_id: int):
-        # Query the association table for existing record
-        association = db.session.query(inventory_pokemon_association).filter_by(
-            inventory_id=self.inventory_id,
-            pokemon_id=pokemon_id
-        ).first()
-
-        if association:
-            if association.quantity > 1:
-                # Decrement the quantity if more than one
-                association.quantity -= 1
-            else:
-                # Remove the association entirely if quantity is one
-                db.session.delete(association)
-        else:
-            # Handle the case where the Pokémon does not exist in the inventory
-            print(f"No such Pokémon (ID: {pokemon_id}) in the inventory to remove.")
-
-        # Commit changes to the database
-        db.session.commit()
+        try:
+            existing_association = db.session.execute(
+            sa.select(inventory_pokemon_association).where(
+                inventory_pokemon_association.c.inventory_id == self.inventory_id,
+                inventory_pokemon_association.c.pokemon_id == pokemon_id
+            )
+            ).fetchone()
+            
+            if existing_association:
+                current_quantity = existing_association[2]
+                print(f"Successfully fetched. Current quantity: {current_quantity}")
+                if current_quantity > 1:
+                    db.session.execute(
+                        inventory_pokemon_association.update().where(
+                            sa.and_(
+                                inventory_pokemon_association.c.inventory_id == self.inventory_id,
+                                inventory_pokemon_association.c.pokemon_id == pokemon_id
+                            )
+                        ).values(quantity=current_quantity - 1)
+                    )
+                elif current_quantity == 1:
+                    db.session.execute(
+                        sa.delete(inventory_pokemon_association).where(
+                            sa.and_(
+                                inventory_pokemon_association.c.inventory_id == self.inventory_id,
+                                inventory_pokemon_association.c.pokemon_id == pokemon_id
+                            )
+                        )
+                    )
+                db.session.commit()
+        except Exception as e:
+            print(f"Error during fetch: {e}")
 
 # The User table is responsible for managing User attributes. 
 class User(UserMixin, db.Model):
@@ -143,11 +165,12 @@ class User(UserMixin, db.Model):
     username = db.Column(db.String(50), nullable=False, unique=True)
     password_hash = db.Column(db.String(100), nullable=False)
     email = db.Column(db.String(100), nullable=False, unique=True)
- 
+    pokeballs = db.Column(db.Integer)
+
     inventory_items = db.relationship('Inventory', back_populates='owner', cascade="all, delete-orphan")
 
     def __repr__(self):
-        return f"<User(user_id={self.user_id}, username={self.username}, email={self.email})>"
+        return f"<User(user_id={self.user_id}, username={self.username}, email={self.email}, pokeballs = {self.pokeballs})>"
     
     def set_password(self, password):
         self.password_hash = generate_password_hash(password)
@@ -159,6 +182,13 @@ class User(UserMixin, db.Model):
     def get_id(self):
         return str(self.user_id)
 
+    def deduct_pokeball(self):
+        if self.pokeballs > 0:
+            self.pokeballs -= 1
+            db.session.commit()
+            return True
+        return False   
+    
 @login.user_loader
 def load_user(id):
     return db.session.get(User, int(id))
@@ -168,15 +198,21 @@ def initialise_database(): # Need to rewrite to instead check integrity of datab
     if not os.path.exists('app.db'): #Checks to see if the database already exsists, Only runs if the database hasn't already been created. 
         db.create_all() #May need to adjust depending on format of other databases.
         Pokemon.populate_database()
-    """
+    
         #For testing
-        user1 = User(username="raymonreddington", password="UWA@", email="kaomak@pokeball.com")
-        user2 = User(username="lizziekeen", password="FB@2024", email="lizzie@pokeball.com")
+
+        user1 = User(username="raymonreddington", password_hash="UWA@", email="kaomak@pokeball.com",pokeballs=99)
+        user2 = User(username="lizziekeen", password_hash="FB@2024", email="lizzie@pokeball.com",pokeballs=10)
 
         db.session.add(user1)
         db.session.add(user2)
         db.session.commit()
 
+        #print(User.query.filter_by(user_id=1).first())
+        db.session.add(Inventory(owner=User.query.filter_by(user_id=1).first()))
+        db.session.commit()
+        #print(Inventory.query.filter_by(user_id=1).first())
+        
         inventory1 = Inventory(owner=user1)
         inventory2 = Inventory(owner=user2)
         db.session.add(inventory1)
@@ -195,21 +231,46 @@ def initialise_database(): # Need to rewrite to instead check integrity of datab
         db.session.add(trading1)
         db.session.commit()
 
-        print(trading1.user_name,trading1.pokemon_trade_in_id,trading1.pokemon_trade_out_id)
+        #print(trading1.user_name,trading1.pokemon_trade_in_id,trading1.pokemon_trade_out_id)
 
         pokemon3 = Pokemon.query.get(3)
-        print(pokemon3.name)
+        #print(pokemon3.name)
 
         pokemon4 = Pokemon.query.filter_by(name = "Bulbasaur").first()
-        print(pokemon4)
+        #print(pokemon4)
 
-        print(user1.username)
+        #print(user1.username)
 
         pokemon_list = inventory1.pokemon_items
+        print("Before Deletion: \n")
         for i in pokemon_list:
             print(i.name)
-    """
-            
+
+        testid = inventory1.inventory_id
+        print(testid)
+
+        inventory1.remove_pokemon(1)
+
+        pokemon_list = inventory1.pokemon_items
+        print("After Deletion:")
+        for i in pokemon_list:
+            print(i.name)
+        
+        pokemon_list = inventory2.pokemon_items
+        print("Before Deletion: \n")
+        for i in pokemon_list:
+            print(i.name)
+
+        testid = inventory2.inventory_id
+        print(testid)
+
+        inventory2.remove_pokemon(3)
+
+        pokemon_list = inventory2.pokemon_items
+        print("After Deletion:")
+        for i in pokemon_list:
+            print(i.name)
+        
 
 
         
