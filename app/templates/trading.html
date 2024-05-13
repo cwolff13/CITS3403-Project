@@ -16,7 +16,7 @@
             background-attachment: fixed;
         }
         .container {
-            max-width: 800px;
+            max-width: 890px;
             margin: 0 auto;
             padding: 20px;
             background-color: #fff;
@@ -32,63 +32,165 @@
             border-radius: 8px;
             margin-bottom: 20px;
         }
+        .trade-modal {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+            max-height: 80%;
+            overflow-y: auto;
+            width: 55%; /* Adjust width as needed */
+            height: 70%; /* Adjust height as needed */
+            z-index: 1000; 
+        }
+        .close-button {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            cursor: pointer;
+            font-size: 20px;
+            color: #888;
+        }
+        .close-button:hover {
+            color: #555;
+        }
+        .trade-box {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+            
+        }
+        .pokemon-list {
+            flex: 1;
+            padding: 20px;
+            overflow-y: auto;
+            max-height: 300px;
+        }
         .pokemon-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); /* Flexible grid layout */
+            grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+            gap: 20px;
+        }
+        .available-pokemon-grid {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: flex-start;
             gap: 20px;
         }
         .pokemon-box {
             padding: 10px;
-            border: 1px solid #ddd; /* Border style */
+            border: 1px solid #ddd;
             border-radius: 8px;
             text-align: center;
             cursor: pointer;
-            transition: transform 0.3s ease;
-            width: 120px; /* Set fixed width for each box */
-            height: 120px; /* Set fixed height to maintain square shape */
+            transition: border-color 0.3s ease;
+            width: 100px;
+            height: 100px;
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
         }
         .pokemon-box:hover {
-            transform: translateY(-5px);
+            border-color: #007bff;
         }
-        .pokemon-img {
-            max-width: 80px; /* Limit max width of the Pokemon image */
-            max-height: 80px; /* Limit max height of the Pokemon image */
-            width: auto;
-            height: auto;
-        }
-        .pokemon-name {
-            font-weight: bold;
-            font-size: 14px;
-        }
-        .user-name {
-            font-style: italic;
-            color: #888;
-            font-size: 12px;
-        }
-        .modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.5);
-            z-index: 1;
+        .trading-pokemon-box {
+            padding: 5px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            text-align: center;
+            cursor: pointer;
+            transition: border-color 0.3s ease;
+            width: 150px; /* Adjust the width as needed */
+            height: auto; /* Allow the height to adjust based on content */
+            display: flex;
+            flex-direction: column;
             justify-content: center;
             align-items: center;
+            display: inline-block;
+            position: relative;
         }
-        .modal-content {
+        .trading-pokemon-box:hover .available-pokemon-trade-confirm {
+            display: block;
+        }
+        .available-pokemon-trade-confirm {
+            display: none;
+            position: absolute;
+            top: calc(100% + 10px);
+            left: 50%;
+            transform: translate(-50%, -50%);
             background-color: #fff;
             padding: 20px;
             border-radius: 8px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+            z-index: 999;
+            width: 200px; /* Adjust the width as needed */
+            height: auto; 
+        }
+        .confirm-button {
             text-align: center;
         }
-        .modal-buttons {
-            margin-top: 20px;
+        .confirm-button button {
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        .confirm-button button:hover {
+            background-color: #0056b3;
+        }
+        .pokemon-img {
+            max-width: 80px;
+            max-height: 80px;
+            width: auto;
+            height: auto;
+        }
+        .confirm-popup {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+            max-width: 400px;
+            width: 80%;
+            text-align: center;
+            z-index: 1000;
+        }
+        .popup-content {
+            text-align: center;
+        }
+        .confirm-buttons button {
+            margin: 5px;
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        .confirm-buttons button:hover {
+            background-color: #0056b3;
+        }
+        .pokemon-name {
+            margin-bottom: 5px; /* Adjust the spacing between name and user name */
+        }
+        
+        .user-name {
+            font-size: 16px; /* Increase the font size of the user name */
+            color: #666;
         }
     </style>
 </head>
@@ -99,69 +201,239 @@
         <!-- Trade Posting Section -->
         <div class="trade-post">
             <h2>Post a Trade Request</h2>
-            <form id="trade-form">
-                <label for="selected-pokemon">Pokemon for Trade:</label>
-                <input type="text" id="selected-pokemon" name="selected-pokemon" placeholder="Enter Pokemon Name">
-                <button type="submit">Post Trade</button>
-            </form>
+            <button type="button" class="btn btn-primary" onclick="openTradeModal()">Post Trade</button>
+        </div>
+
+        <!-- Trade Modal -->
+        <div id="tradeModal" class="trade-modal">
+            <span class="close-button" onclick="closeTradeModal()">&times;</span>
+            <div class="modal-content">
+                <h2>Trade Pokemon</h2>
+                <div class="trade-box">
+                    <!-- Pokemon to receive -->
+                    <div class="pokemon-list">
+                        <h3>Select Pokemon to Receive</h3>
+                        <div class="pokemon-grid" id="pokemonToReceiveList">
+                            <!-- Rendered dynamically using JavaScript -->
+                        </div>
+                    </div>
+                    <!-- Pokemon to trade out -->
+                    <div class="pokemon-list">
+                        <h3>Select Pokemon to Trade Out</h3>
+                        <div class="pokemon-grid" id="pokemonToTradeOutList">
+                            <!-- Rendered dynamically using JavaScript -->
+                        </div>
+                    </div>
+                </div>
+                <div class="confirm-button">
+                    <button onclick="confirmTrade()">Confirm Trade</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Confirmation Popup -->
+        <div id="confirmPopup" class="confirm-popup">
+            <div class="popup-content">
+                <h2>Confirm Trade</h2>
+                <p>Are you sure you want to trade <span id="selectedPokemonToReceive"></span> for <span id="selectedPokemonToTradeOut"></span>?</p>
+                <div class="confirm-buttons">
+                    <button id="tradeButton" onclick="confirmTradeFinal()">Confirm</button>
+                    <button onclick="closeConfirmationModal()">Cancel</button>
+                </div>
+            </div>
         </div>
 
         <!-- Available Pokemon for Trading -->
         <h2>Available Pokemon for Trading</h2>
-        <div class="pokemon-grid">
-            <!-- Example Pokemon Boxes (Replace with dynamic data from backend) -->
-            <div class="pokemon-box" onclick="openTradeConfirmation('Pikachu', 'User 1')">
-                <img src="https://img.pokemondb.net/artwork/pikachu.jpg" alt="Pikachu" class="pokemon-img">
-                <p class="pokemon-name">Pikachu</p>
-                <p class="user-name">User 1</p>
-            </div>
-            <div class="pokemon-box" onclick="openTradeConfirmation('Charmander', 'User 2')">
-                <img src="https://img.pokemondb.net/artwork/charmander.jpg" alt="Charmander" class="pokemon-img">
-                <p class="pokemon-name">Charmander</p>
-                <p class="user-name">User 2</p>
-            </div>
-            <div class="pokemon-box" onclick="openTradeConfirmation('Bulbasaur', 'User 3')">
-                <img src="https://img.pokemondb.net/artwork/bulbasaur.jpg" alt="Bulbasaur" class="pokemon-img">
-                <p class="pokemon-name">Bulbasaur</p>
-                <p class="user-name">User 3</p>
-            </div>
-            <div class="pokemon-box" onclick="openTradeConfirmation('Eevee', 'User 4')">
-                <img src="https://img.pokemondb.net/artwork/eevee.jpg" alt="Eevee" class="pokemon-img">
-                <p class="pokemon-name">Eevee</p>
-                <p class="user-name">User 4</p>
-            </div>
+        <div class="available-pokemon-grid">
+            {% for trade in trading_data%}
+                {% set pokemon_in = Pokemon.query.filter_by(id=trade.pokemon_trade_in_id).first() %}
+                {% set pokemon_out = Pokemon.query.filter_by(id=trade.pokemon_trade_out_id).first() %}
+                <div class="trading-pokemon-box">
+                    <img src="{{ url_for('static', filename=pokemon_out.poke_url) }}" alt="{{ pokemon_out.name }}" class="pokemon-img">
+                    <p class="pokemon-name">{{ pokemon_out.name }}</p>
+                    <p class="user-name">{{ trade.user_name }}</p>
+                    <div class="available-pokemon-trade-confirm">
+                        
+                        <img src="{{ url_for('static', filename=pokemon_in.poke_url) }}" alt="{{ pokemon_in.name }}" class="pokemon-img">
+                        <p>Trading {{ pokemon_in.name }} for {{ pokemon_out.name }} </p>
+                        <div class="confirm-buttons">
+                            <button onclick="confirmAvailableTrade('{{ trade.id }}')">Trade</button>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}    
         </div>
 
-        <!-- Trade Confirmation Modal -->
-        <div id="tradeModal" class="modal">
-            <div class="modal-content">
+        <div id="confirm-available-trade" class="confirm-popup">
+            <div class="popup-content">
                 <h2>Confirm Trade</h2>
-                <p id="tradeDetails"></p>
-                <div class="modal-buttons">
-                    <button onclick="confirmTrade()">Confirm Trade</button>
-                    <button onclick="closeTradeConfirmation()">Cancel</button>
+                <p>Are you sure you want to make this trade?</p>
+                <div class="confirm-buttons">
+                    <!-- Confirm button with inline JavaScript -->
+                    <button onclick="confirmAvailableTradeFinal()">Confirm</button>
+                    <button onclick="closeAvalableTradeConfirmation()">Cancel</button>
                 </div>
             </div>
         </div>
     </div>
 
     <script>
-        let currentPokemon = '';
-
-        function openTradeConfirmation(pokemonName, userName) {
-            currentPokemon = pokemonName;
-            document.getElementById('tradeDetails').textContent = `Trade ${pokemonName} with ${userName}?`;
-            document.getElementById('tradeModal').style.display = 'flex';
+        let currentPokemonToReceive = '';
+        let currentPokemonToTradeOut = '';
+        var currentTradeId = null;
+        
+        function openTradeModal() {
+            document.getElementById('tradeModal').style.display = 'block';
+            showPokemonToReceive();
+            showPokemonToTradeOut();
         }
 
-        function closeTradeConfirmation() {
+        function closeTradeModal() {
             document.getElementById('tradeModal').style.display = 'none';
         }
 
+        function openTradeConfirmation(pokemonName, userName) {
+            document.getElementById('tradeModal').style.display = 'block';
+            document.getElementById('tradeModal').scrollIntoView();
+            showPokemonToReceive();
+            showPokemonToTradeOut();
+            highlightPokemon('pokemonToReceiveList', pokemonName);
+        }
+
+        function highlightPokemon(listId, pokemonName) {
+            const pokemonBoxes = document.querySelectorAll(`#${listId} .pokemon-box`);
+            for (let box of pokemonBoxes) {
+                if (box.querySelector('.pokemon-name').textContent === pokemonName) {
+                    box.style.border = '2px solid #007bff';
+                } else {
+                    box.style.border = '1px solid #ddd';
+                }
+            }
+        }
+
+        function showPokemonToReceive() {
+            const pokemonToReceiveList = document.getElementById('pokemonToReceiveList');
+            pokemonToReceiveList.innerHTML = `
+                {% for pokemon in all_pokemon %}
+                    <div class="pokemon-box" onclick="selectPokemonToReceive('{{ pokemon.name }}')">
+                        <img src="{{ url_for('static', filename=pokemon.poke_url) }}" alt="{{ pokemon.name }}" class="pokemon-img">
+                        <p class="pokemon-name">{{ pokemon.name }}</p>
+                    </div>
+                {% endfor %}
+            `;
+        }
+
+        function showPokemonToTradeOut() {
+            const pokemonToTradeOutList = document.getElementById('pokemonToTradeOutList');
+            pokemonToTradeOutList.innerHTML = `
+                {% for pokemon in current_user_pokemon %}
+                    <div class="pokemon-box" onclick="selectPokemonToTradeOut('{{ pokemon.name }}')">
+                        <img src="{{ url_for('static', filename=pokemon.poke_url) }}" alt="{{ pokemon.name }}" class="pokemon-img">
+                        <p class="pokemon-name">{{ pokemon.name }}</p>
+                    </div>
+                {% endfor %} 
+            `;
+        }
+
+        function selectPokemonToReceive(pokemonName) {
+            currentPokemonToReceive = pokemonName;
+            highlightPokemon('pokemonToReceiveList', pokemonName);
+        }
+
+        function selectPokemonToTradeOut(pokemonName) {
+            currentPokemonToTradeOut = pokemonName;
+            highlightPokemon('pokemonToTradeOutList', pokemonName);
+        }
+
         function confirmTrade() {
-            // Perform trade logic here (e.g., submit trade request)
-            alert(`Trade confirmed for ${currentPokemon}!`);
-            closeTradeConfirmation();
+            if (currentPokemonToReceive && currentPokemonToTradeOut) {
+                document.getElementById('selectedPokemonToReceive').textContent = currentPokemonToReceive;
+                document.getElementById('selectedPokemonToTradeOut').textContent = currentPokemonToTradeOut;
+                document.getElementById('confirmPopup').style.display = 'block';
+            } else {
+                alert('Please select both Pokemon to trade.');
+            }
+        }
+
+        function confirmTradeFinal() {
+            if (currentPokemonToReceive && currentPokemonToTradeOut) {
+                // Send an AJAX request to Flask backend
+                closeConfirmationModal();
+                closeTradeModal();
+                let formData = new FormData();
+                formData.append('pokemon_to_receive', currentPokemonToReceive);
+                formData.append('pokemon_to_trade_out', currentPokemonToTradeOut);
+                fetch('/trading', {
+                    method: 'POST',
+                    body: formData
+                })
+                .then(response => {
+                    if (response.ok) {
+                        return response.json();
+                    }
+                    throw new Error('Network response was not ok.');
+                })
+                .then(data => {
+                    // Handle success response from Flask backend
+                    console.log(data);
+                    // Reset the current selections and close the modal
+                    currentPokemonToReceive = '';
+                    currentPokemonToTradeOut = '';
+                    
+                })
+                .catch(error => {
+                    // Handle error
+                    console.error('Error:', error);
+                });
+                window.location.reload()
+            } else {
+                alert('Please select both Pokémon to trade.');
+            }
+        }
+
+        function closeConfirmationModal() {
+            document.getElementById('confirmPopup').style.display = 'none';
+        }
+
+        function confirmAvailableTrade(tradeId) {
+            // Store the trade ID and show the confirmation modal
+            currentTradeId = tradeId;
+            document.getElementById('confirm-available-trade').style.display = 'block';
+        }
+        function confirmAvailableTradeFinal() {
+            if (currentTradeId) {
+                // Send an AJAX request to delete the trade
+                fetch('/trading?trade_id=' + currentTradeId, {
+                    method: 'DELETE',
+                })
+                .then(response => {
+                    if (response.ok) {
+                        // If successful, reload the page to reflect changes
+                        window.location.reload();
+                    } else {
+                        // Handle errors
+                        console.error('Failed to delete trade');
+                    }
+                })
+                .catch(error => {
+                    // Handle network errors
+                    console.error('Error:', error);
+                });
+                // Close the confirmation modal
+                closeAvalableTradeConfirmation();
+                // Reset the current trade ID
+                currentTradeId = null;
+                window.location.reload()
+            } else {
+                // If no trade ID is selected, show an alert
+                alert('Please select a trade.');
+            }
+        }
+
+        function closeAvalableTradeConfirmation() {
+            // Close the confirmation modal
+            document.getElementById('confirm-available-trade').style.display = 'none';
         }
     </script>
 </body>

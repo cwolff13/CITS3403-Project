@@ -80,7 +80,7 @@
 80,Slowbro,images/pokemonImages/Slowbro.jpg
 81,Magnemite,images/pokemonImages/Magnemite.jpg
 82,Magneton,images/pokemonImages/Magneton.jpg
-83,Farfetch’d,images/pokemonImages/farfetchd.jpg
+83,Farfetch’d,images/pokemonImages/Farfetchd.jpg
 84,Doduo,images/pokemonImages/Doduo.jpg
 85,Dodrio,images/pokemonImages/Dodrio.jpg
 86,Seel,images/pokemonImages/Seel.jpg
@@ -119,7 +119,7 @@
 119,Seaking,images/pokemonImages/Seaking.jpg
 120,Staryu,images/pokemonImages/Staryu.jpg
 121,Starmie,images/pokemonImages/Starmie.jpg
-122,Mr. Mime,images/pokemonImages/Mr-Mime.jpg
+122,Mr.Mime,images/pokemonImages/Mr.Mime.jpg
 123,Scyther,images/pokemonImages/Scyther.jpg
 124,Jynx,images/pokemonImages/Jynx.jpg
 125,Electabuzz,images/pokemonImages/Electabuzz.jpg
