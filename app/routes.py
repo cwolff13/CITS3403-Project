@@ -131,6 +131,11 @@ def trading():
                 break
             
         if (trade_available) and (current_user.user_id != user.user_id):
+            for trades in trading_data:
+                if trades.user_name == user.username and trades.pokemon_trade_out_id == pokemon_trade_out:
+                    if user_inventory.get_pokemon_quantity(trades.pokemon_trade_out_id) == 1:
+                        Trading.delete_trade(trades.id)
+                        
             user_inventory.add_pokemon(pokemon_trade_in)
             
             current_user_inventory.remove_pokemon(pokemon_trade_in)   
@@ -141,9 +146,6 @@ def trading():
             
             Trading.delete_trade(trade_id)
             
-            for trades in trading_data:
-                if trades.user_name == user.username and trades.pokemon_trade_out_id == pokemon_trade_out:
-                    Trading.delete_trade(trades.id)
         else:  
             if (current_user.user_id == user.user_id):
                 flash('You cannot trade against yourself')

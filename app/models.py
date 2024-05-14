@@ -173,7 +173,16 @@ class Inventory(db.Model):
                 db.session.commit()
         except Exception as e:
             print(f"Error during fetch: {e}")
-
+    
+    def get_pokemon_quantity(self, pokemon_id: int) -> int:
+        """
+        Get the quantity of a specific Pokémon in the inventory.
+        """
+        association = db.session.query(inventory_pokemon_association).filter_by(inventory_id=self.inventory_id, pokemon_id=pokemon_id).first()
+        if association:
+            return association.quantity
+        return 0
+    
 # The User table is responsible for managing User attributes. 
 class User(UserMixin, db.Model):
     __tablename__ = 'user'
@@ -272,6 +281,7 @@ def initialise_database(): # Need to rewrite to instead check integrity of datab
     # db.session.commit()
     
     # inventory1 = Inventory.query.filter_by(user_id=1).first()
+    # inventory1.add_pokemon(1)
     # inventory1.add_pokemon(1)
     # inventory1.add_pokemon(2)
     # inventory1.add_pokemon(3)
