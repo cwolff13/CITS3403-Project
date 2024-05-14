@@ -84,15 +84,16 @@ def catching_pokemon():
 @app.route('/trading', methods=['GET', 'POST', 'DELETE'])
 #@login_required
 def trading():
-    current_user = User.query.filter_by(username="long").first()
     trading_data = Trading.query.all()
     current_user_inventory = Inventory.query.filter_by(user_id=current_user.user_id).first()
+    if not current_user_inventory:
+        # Handle case where user does not have an inventory
+        flash('Inventory not found for the current user.')
+        return redirect(url_for('inventory'))
+    
     current_user_pokemon = current_user_inventory.pokemon_items
-    
     all_pokemon = Pokemon.query.all()
-    if not current_user:
-        return "User not found", 404
-    
+
     if request.method == 'POST':
         # Retrieve the Pokémon names from the form data
         pokemon_to_receive_name = request.form['pokemon_to_receive']
@@ -104,17 +105,17 @@ def trading():
         
         if pokemon_to_receive_id and pokemon_to_trade_out_id:
             # Add the trade using the IDs
-            Trading.add_trade(user_name= current_user.username, 
+            Trading.add_trade(user_name=current_user.username, 
                               pokemon_trade_in_id=pokemon_to_receive_id, 
                               pokemon_trade_out_id=pokemon_to_trade_out_id)
             # Optionally, you can redirect or render a new template after adding the trade
-            return redirect(location=url_for("trading"))
+            return redirect(url_for('trading'))
     elif request.method == 'DELETE':
         trade_id = request.args.get('trade_id')
         
         trade = Trading.query.get(trade_id)
         
-        user = User.query.filter_by(username = trade.user_name).first()
+        user = User.query.filter_by(username=trade.user_name).first()
         
         user_inventory = Inventory.query.filter_by(user_id=user.user_id).first()
         
@@ -132,17 +133,16 @@ def trading():
         
         Trading.delete_trade(trade_id)
         
-        return redirect(location=url_for("trading"))
+        return redirect(url_for('trading'))
     else:
-        
-        
         for trade in trading_data:
             print(f"Trade ID: {trade.id}, User Name: {trade.user_name}, Trade In ID: {trade.pokemon_trade_in_id}, Trade Out ID: {trade.pokemon_trade_out_id}")
         
         for pokemon in current_user_pokemon:
             print(f"pokemon ID: {pokemon.id}")
         # Pass the form object to the template along with other data
-        return render_template('trading.html', trading_data=trading_data, current_user_pokemon = current_user_pokemon, all_pokemon = all_pokemon, Pokemon = Pokemon)
+        return render_template('trading.html', trading_data=trading_data, current_user_pokemon=current_user_pokemon, all_pokemon=all_pokemon, Pokemon=Pokemon)
+
     
 @app.route('/profile')
 #@login_required
