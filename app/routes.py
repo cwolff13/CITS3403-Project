@@ -147,7 +147,7 @@ def trading():
 @app.route('/profile')
 @login_required
 def profile():
-    return render_template('profile/profileManagement.html')
+    return render_template('profile/profileManagement.html', username=current_user.username)
 
 # @app.route('/inventory')
 # @login_required
