@@ -45,13 +45,13 @@ def logout():
 
 
 @app.route('/catching')
-#@login_required
+@login_required
 def catching():
     pokeball_count = current_user.pokeballs
     return render_template('catching.html', pokeball_count=pokeball_count )
 
 @app.route('/catching-pokemon', methods=['POST'])
-#@login_required
+@login_required
 def catching_pokemon():
     if current_user.pokeballs < 1:
         return jsonify({'success': False, 'message': 'Not enough Pokeballs'})
@@ -82,7 +82,7 @@ def catching_pokemon():
     })
 
 @app.route('/trading', methods=['GET', 'POST', 'DELETE'])
-#@login_required
+@login_required
 def trading():
     trading_data = Trading.query.all()
     current_user_inventory = Inventory.query.filter_by(user_id=current_user.user_id).first()
@@ -145,7 +145,7 @@ def trading():
 
     
 @app.route('/profile')
-#@login_required
+@login_required
 def profile():
     return render_template('profile/profileManagement.html')
 
@@ -157,7 +157,7 @@ def profile():
 # newly added:
 
 @app.route('/inventory')
-#@login_required
+@login_required
 def user_inventory():
     # Assuming "kaoma" is uniquely identified by username or another identifier
     user = User.query.filter_by(username="long").first()
