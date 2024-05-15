@@ -4,197 +4,17 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" type="image/x-icon" href="static/images/pokeball.png">
-    <link rel="stylesheet" href="../styles.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='/trading/trading.css') }}">
+    <script src="{{ url_for('static', filename='/trading/trading.js') }}"></script>
     <title>Pokemon Trading Page</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 20px;
-            background-image: url("static/images/pokemonwallpaper.jpg");
-            background-size: cover;
-            background-attachment: fixed;
-        }
-        .container {
-            max-width: 890px;
-            margin: 0 auto;
-            padding: 20px;
-            background-color: #fff;
-            border-radius: 8px;
-            box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-        }
-        h1, h2, h3 {
-            text-align: center;
-        }
-        .trade-post {
-            padding: 20px;
-            background-color: #f5f5f5;
-            border-radius: 8px;
-            margin-bottom: 20px;
-        }
-        .trade-modal {
-            display: none;
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background-color: #fff;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-            max-height: 80%;
-            overflow-y: auto;
-            width: 55%; /* Adjust width as needed */
-            height: 70%; /* Adjust height as needed */
-            z-index: 1000; 
-        }
-        .close-button {
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            cursor: pointer;
-            font-size: 20px;
-            color: #888;
-        }
-        .close-button:hover {
-            color: #555;
-        }
-        .trade-box {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 20px;
-            
-        }
-        .pokemon-list {
-            flex: 1;
-            padding: 20px;
-            overflow-y: auto;
-            max-height: 300px;
-        }
-        .pokemon-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
-            gap: 20px;
-        }
-        .available-pokemon-grid {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: flex-start;
-            gap: 20px;
-        }
-        .pokemon-box {
-            padding: 10px;
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            text-align: center;
-            cursor: pointer;
-            transition: border-color 0.3s ease;
-            width: 100px;
-            height: 100px;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-        }
-        .pokemon-box:hover {
-            border-color: #007bff;
-        }
-        .trading-pokemon-box {
-            padding: 5px;
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            text-align: center;
-            cursor: pointer;
-            transition: border-color 0.3s ease;
-            width: 150px; /* Adjust the width as needed */
-            height: auto; /* Allow the height to adjust based on content */
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            display: inline-block;
-            position: relative;
-        }
-        .trading-pokemon-box:hover .available-pokemon-trade-confirm {
-            display: block;
-        }
-        .available-pokemon-trade-confirm {
-            display: none;
-            position: absolute;
-            top: calc(100% + 10px);
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background-color: #fff;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-            z-index: 999;
-            width: 200px; /* Adjust the width as needed */
-            height: auto; 
-        }
-        .confirm-button {
-            text-align: center;
-        }
-        .confirm-button button {
-            padding: 10px 20px;
-            background-color: #007bff;
-            color: #fff;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-        }
-        .confirm-button button:hover {
-            background-color: #0056b3;
-        }
-        .pokemon-img {
-            max-width: 80px;
-            max-height: 80px;
-            width: auto;
-            height: auto;
-        }
-        .confirm-popup {
-            display: none;
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background-color: #fff;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-            max-width: 400px;
-            width: 80%;
-            text-align: center;
-            z-index: 1000;
-        }
-        .popup-content {
-            text-align: center;
-        }
-        .confirm-buttons button {
-            margin: 5px;
-            padding: 10px 20px;
-            background-color: #007bff;
-            color: #fff;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-        }
-        .confirm-buttons button:hover {
-            background-color: #0056b3;
-        }
-        .pokemon-name {
-            margin-bottom: 5px; /* Adjust the spacing between name and user name */
-        }
-        
-        .user-name {
-            font-size: 16px; /* Increase the font size of the user name */
-            color: #666;
-        }
-    </style>
 </head>
 <body>
+    <div class="sidenav">
+        <a href="{{ url_for('profile') }}">Profile Management</a>
+        <a href="{{ url_for('trading') }}">Trading</a>
+        <a href="{{ url_for('catching') }}">Catching Page</a>
+        <a href="{{ url_for('logout') }}">Logout</a>
+    </div>
     <div class="container">
         <h1>Pokemon Trading Page</h1>
 
@@ -214,14 +34,24 @@
                     <div class="pokemon-list">
                         <h3>Select Pokemon to Receive</h3>
                         <div class="pokemon-grid" id="pokemonToReceiveList">
-                            <!-- Rendered dynamically using JavaScript -->
+                            {% for pokemon in all_pokemon %}
+                                <div class="pokemon-box" onclick="selectPokemonToReceive('{{ pokemon.name }}')">
+                                    <img src="{{ url_for('static', filename=pokemon.poke_url) }}" alt="{{ pokemon.name }}" class="pokemon-img">
+                                    <p class="pokemon-name">{{ pokemon.name }}</p>
+                                </div>
+                            {% endfor %}
                         </div>
                     </div>
                     <!-- Pokemon to trade out -->
                     <div class="pokemon-list">
                         <h3>Select Pokemon to Trade Out</h3>
                         <div class="pokemon-grid" id="pokemonToTradeOutList">
-                            <!-- Rendered dynamically using JavaScript -->
+                            {% for pokemon in current_user_pokemon %}
+                                <div class="pokemon-box" onclick="selectPokemonToTradeOut('{{ pokemon.name }}')">
+                                    <img src="{{ url_for('static', filename=pokemon.poke_url) }}" alt="{{ pokemon.name }}" class="pokemon-img">
+                                    <p class="pokemon-name">{{ pokemon.name }}</p>
+                                </div>
+                            {% endfor %} 
                         </div>
                     </div>
                 </div>
@@ -258,7 +88,7 @@
                         <img src="{{ url_for('static', filename=pokemon_in.poke_url) }}" alt="{{ pokemon_in.name }}" class="pokemon-img">
                         <p>Trading {{ pokemon_in.name }} for {{ pokemon_out.name }} </p>
                         <div class="confirm-buttons">
-                            <button onclick="confirmAvailableTrade('{{ trade.id }}')">Trade</button>
+                            <button onclick="confirmAvailableTrade('{{ trade.id }}'), reloadWindow">Trade</button>
                         </div>
                     </div>
                 </div>
@@ -271,172 +101,11 @@
                 <p>Are you sure you want to make this trade?</p>
                 <div class="confirm-buttons">
                     <!-- Confirm button with inline JavaScript -->
-                    <button onclick="confirmAvailableTradeFinal()">Confirm</button>
+                    <button onclick="confirmAvailableTradeFinal(), reloadWindow" >Confirm</button>
                     <button onclick="closeAvalableTradeConfirmation()">Cancel</button>
                 </div>
             </div>
         </div>
     </div>
-
-    <script>
-        let currentPokemonToReceive = '';
-        let currentPokemonToTradeOut = '';
-        var currentTradeId = null;
-        
-        function openTradeModal() {
-            document.getElementById('tradeModal').style.display = 'block';
-            showPokemonToReceive();
-            showPokemonToTradeOut();
-        }
-
-        function closeTradeModal() {
-            document.getElementById('tradeModal').style.display = 'none';
-        }
-
-        function openTradeConfirmation(pokemonName, userName) {
-            document.getElementById('tradeModal').style.display = 'block';
-            document.getElementById('tradeModal').scrollIntoView();
-            showPokemonToReceive();
-            showPokemonToTradeOut();
-            highlightPokemon('pokemonToReceiveList', pokemonName);
-        }
-
-        function highlightPokemon(listId, pokemonName) {
-            const pokemonBoxes = document.querySelectorAll(`#${listId} .pokemon-box`);
-            for (let box of pokemonBoxes) {
-                if (box.querySelector('.pokemon-name').textContent === pokemonName) {
-                    box.style.border = '2px solid #007bff';
-                } else {
-                    box.style.border = '1px solid #ddd';
-                }
-            }
-        }
-
-        function showPokemonToReceive() {
-            const pokemonToReceiveList = document.getElementById('pokemonToReceiveList');
-            pokemonToReceiveList.innerHTML = `
-                {% for pokemon in all_pokemon %}
-                    <div class="pokemon-box" onclick="selectPokemonToReceive('{{ pokemon.name }}')">
-                        <img src="{{ url_for('static', filename=pokemon.poke_url) }}" alt="{{ pokemon.name }}" class="pokemon-img">
-                        <p class="pokemon-name">{{ pokemon.name }}</p>
-                    </div>
-                {% endfor %}
-            `;
-        }
-
-        function showPokemonToTradeOut() {
-            const pokemonToTradeOutList = document.getElementById('pokemonToTradeOutList');
-            pokemonToTradeOutList.innerHTML = `
-                {% for pokemon in current_user_pokemon %}
-                    <div class="pokemon-box" onclick="selectPokemonToTradeOut('{{ pokemon.name }}')">
-                        <img src="{{ url_for('static', filename=pokemon.poke_url) }}" alt="{{ pokemon.name }}" class="pokemon-img">
-                        <p class="pokemon-name">{{ pokemon.name }}</p>
-                    </div>
-                {% endfor %} 
-            `;
-        }
-
-        function selectPokemonToReceive(pokemonName) {
-            currentPokemonToReceive = pokemonName;
-            highlightPokemon('pokemonToReceiveList', pokemonName);
-        }
-
-        function selectPokemonToTradeOut(pokemonName) {
-            currentPokemonToTradeOut = pokemonName;
-            highlightPokemon('pokemonToTradeOutList', pokemonName);
-        }
-
-        function confirmTrade() {
-            if (currentPokemonToReceive && currentPokemonToTradeOut) {
-                document.getElementById('selectedPokemonToReceive').textContent = currentPokemonToReceive;
-                document.getElementById('selectedPokemonToTradeOut').textContent = currentPokemonToTradeOut;
-                document.getElementById('confirmPopup').style.display = 'block';
-            } else {
-                alert('Please select both Pokemon to trade.');
-            }
-        }
-
-        function confirmTradeFinal() {
-            if (currentPokemonToReceive && currentPokemonToTradeOut) {
-                // Send an AJAX request to Flask backend
-                closeConfirmationModal();
-                closeTradeModal();
-                let formData = new FormData();
-                formData.append('pokemon_to_receive', currentPokemonToReceive);
-                formData.append('pokemon_to_trade_out', currentPokemonToTradeOut);
-                fetch('/trading', {
-                    method: 'POST',
-                    body: formData
-                })
-                .then(response => {
-                    if (response.ok) {
-                        return response.json();
-                    }
-                    throw new Error('Network response was not ok.');
-                })
-                .then(data => {
-                    // Handle success response from Flask backend
-                    console.log(data);
-                    // Reset the current selections and close the modal
-                    currentPokemonToReceive = '';
-                    currentPokemonToTradeOut = '';
-                    
-                })
-                .catch(error => {
-                    // Handle error
-                    console.error('Error:', error);
-                });
-                window.location.reload()
-            } else {
-                alert('Please select both Pokémon to trade.');
-            }
-        }
-
-        function closeConfirmationModal() {
-            document.getElementById('confirmPopup').style.display = 'none';
-        }
-
-        function confirmAvailableTrade(tradeId) {
-            // Store the trade ID and show the confirmation modal
-            currentTradeId = tradeId;
-            document.getElementById('confirm-available-trade').style.display = 'block';
-        }
-        function confirmAvailableTradeFinal() {
-            if (currentTradeId) {
-                // Send an AJAX request to delete the trade
-                fetch('/trading?trade_id=' + currentTradeId, {
-                    method: 'DELETE',
-                })
-                .then(response => {
-                    if (response.ok) {
-                        // If successful, reload the page to reflect changes
-                        window.location.reload();
-                    } else {
-                        // Handle errors
-                        console.error('Failed to delete trade');
-                    }
-                })
-                .catch(error => {
-                    // Handle network errors
-                    console.error('Error:', error);
-                });
-                // Close the confirmation modal
-                closeAvalableTradeConfirmation();
-                // Reset the current trade ID
-                currentTradeId = null;
-                window.location.reload()
-            } else {
-                // If no trade ID is selected, show an alert
-                alert('Please select a trade.');
-            }
-        }
-
-        function closeAvalableTradeConfirmation() {
-            // Close the confirmation modal
-            document.getElementById('confirm-available-trade').style.display = 'none';
-        }
-
-
-    </script>
 </body>
 </html>

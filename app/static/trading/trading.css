@@ -1,21 +1,60 @@
 body {
     font-family: Arial, sans-serif;
     margin: 0;
-    padding: 20px;
-    background-image: url("static/images/pokemonwallpaper.jpg");
+    padding: 0;
+    background-image: url("../images/pokemonwallpaper.jpg");
     background-size: cover;
     background-attachment: fixed;
 }
-.container {
+/* .container {
     max-width: 890px;
     margin: 0 auto;
     padding: 20px;
     background-color: #fff;
     border-radius: 8px;
     box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    position: relative;
+} */
+
+.container {
+    width: calc(100% - 200px);
+    margin-left: 200px;
+    margin-top: 0; /* Remove the margin-top */
+    padding: 20px;
+    background-color: #fff;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    box-sizing: border-box;
+    position: fixed; /* Position the container fixed */
+    top: 0; /* Align the container to the top */
+    bottom: 0; /* Align the container to the bottom */
+    overflow-y: auto; /* Enable vertical scrolling when content overflows */
 }
 h1, h2, h3 {
     text-align: center;
+}
+.sidenav {
+    height: 100%;
+    width: 200px;
+    position: fixed;
+    z-index: 1000;
+    top: 0;
+    left: 0;
+    background-color: #3050a0;
+    overflow-x: hidden;
+    padding-top: 20px;
+}
+  
+.sidenav a {
+color: #ffffff;
+padding: 16px;
+text-decoration: none;
+display: block;
+transition: 0.3s;
+}
+
+.sidenav a:hover {
+background-color: #dd4040;
+color: #ffffff;
 }
 .trade-post {
     padding: 20px;

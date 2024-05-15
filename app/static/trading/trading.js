@@ -4,8 +4,6 @@ var currentTradeId = null;
 
 function openTradeModal() {
     document.getElementById('tradeModal').style.display = 'block';
-    showPokemonToReceive();
-    showPokemonToTradeOut();
 }
 
 function closeTradeModal() {
@@ -29,30 +27,6 @@ function highlightPokemon(listId, pokemonName) {
             box.style.border = '1px solid #ddd';
         }
     }
-}
-
-function showPokemonToReceive() {
-    const pokemonToReceiveList = document.getElementById('pokemonToReceiveList');
-    pokemonToReceiveList.innerHTML = `
-        {% for pokemon in all_pokemon %}
-            <div class="pokemon-box" onclick="selectPokemonToReceive('{{ pokemon.name }}')">
-                <img src="{{ url_for('static', filename=pokemon.poke_url) }}" alt="{{ pokemon.name }}" class="pokemon-img">
-                <p class="pokemon-name">{{ pokemon.name }}</p>
-            </div>
-        {% endfor %}
-    `;
-}
-
-function showPokemonToTradeOut() {
-    const pokemonToTradeOutList = document.getElementById('pokemonToTradeOutList');
-    pokemonToTradeOutList.innerHTML = `
-        {% for pokemon in current_user_pokemon %}
-            <div class="pokemon-box" onclick="selectPokemonToTradeOut('{{ pokemon.name }}')">
-                <img src="{{ url_for('static', filename=pokemon.poke_url) }}" alt="{{ pokemon.name }}" class="pokemon-img">
-                <p class="pokemon-name">{{ pokemon.name }}</p>
-            </div>
-        {% endfor %} 
-    `;
 }
 
 function selectPokemonToReceive(pokemonName) {
