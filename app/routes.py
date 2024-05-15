@@ -86,8 +86,9 @@ def catching_pokemon():
     })
 
 @app.route('/trading', methods=['GET', 'POST', 'DELETE'])
-@login_required
+#@login_required
 def trading():
+    #current_user = User.query.filter_by(username="long").first()
     trading_data = Trading.query.all()
     current_user_inventory = Inventory.query.filter_by(user_id=current_user.user_id).first()
     if not current_user_inventory:
@@ -115,6 +116,8 @@ def trading():
             # Optionally, you can redirect or render a new template after adding the trade
             return redirect(url_for('trading'))
     elif request.method == 'DELETE':
+        trade_available = False
+        
         trade_id = request.args.get('trade_id')
         
         trade = Trading.query.get(trade_id)
@@ -127,16 +130,32 @@ def trading():
         
         pokemon_trade_out = trade.pokemon_trade_out_id
         
-        user_inventory.add_pokemon(pokemon_trade_in)
-        
-        current_user_inventory.remove_pokemon(pokemon_trade_in)   
-        
-        current_user_inventory.add_pokemon(pokemon_trade_out)
-        
-        user_inventory.remove_pokemon(pokemon_trade_out)
-        
-        Trading.delete_trade(trade_id)
-        
+        for pokemon in current_user_pokemon:
+            if pokemon.id == pokemon_trade_in: 
+                trade_available = True
+                break
+            
+        if (trade_available) and (current_user.user_id != user.user_id):
+            for trades in trading_data:
+                if trades.user_name == user.username and trades.pokemon_trade_out_id == pokemon_trade_out:
+                    if user_inventory.get_pokemon_quantity(trades.pokemon_trade_out_id) == 1:
+                        Trading.delete_trade(trades.id)
+                        
+            user_inventory.add_pokemon(pokemon_trade_in)
+            
+            current_user_inventory.remove_pokemon(pokemon_trade_in)   
+            
+            current_user_inventory.add_pokemon(pokemon_trade_out)
+            
+            user_inventory.remove_pokemon(pokemon_trade_out)
+            
+            Trading.delete_trade(trade_id)
+            
+        else:  
+            if (current_user.user_id == user.user_id):
+                flash('You cannot trade against yourself')
+            else:
+                flash('The Pokémon you are trying to trade out is not in your inventory.')
         return redirect(url_for('trading'))
     else:
         for trade in trading_data:
@@ -146,7 +165,6 @@ def trading():
             print(f"pokemon ID: {pokemon.id}")
         # Pass the form object to the template along with other data
         return render_template('trading.html', trading_data=trading_data, current_user_pokemon=current_user_pokemon, all_pokemon=all_pokemon, Pokemon=Pokemon)
-
 
 @app.route('/profile', methods=['GET', 'POST'])
 @login_required
