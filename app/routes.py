@@ -3,6 +3,10 @@ from flask import render_template, request, redirect, url_for, flash, Flask, req
 from flask_login import login_user, login_required, current_user, logout_user
 from app import app, db
 from app.models import User, Pokemon, Inventory, Trading
+# imports for the updating users password:
+from app.form import UpdateAccountForm
+from werkzeug.security import generate_password_hash, check_password_hash  
+
 
 @app.route('/')
 @app.route('/login', methods=['GET', 'POST'])
@@ -45,9 +49,10 @@ def logout():
 
 
 @app.route('/catching')
+@login_required
 def catching():
     pokeball_count = current_user.pokeballs
-    return render_template('catching.html', pokeball_count=pokeball_count)
+    return render_template('catching.html', pokeball_count=pokeball_count )
 
 @app.route('/catching-pokemon', methods=['POST'])
 @login_required
@@ -83,7 +88,7 @@ def catching_pokemon():
 @app.route('/trading', methods=['GET', 'POST', 'DELETE'])
 #@login_required
 def trading():
-    current_user = User.query.filter_by(username="long").first()
+    #current_user = User.query.filter_by(username="long").first()
     trading_data = Trading.query.all()
     current_user_inventory = Inventory.query.filter_by(user_id=current_user.user_id).first()
     if not current_user_inventory:
@@ -151,7 +156,6 @@ def trading():
                 flash('You cannot trade against yourself')
             else:
                 flash('The Pokémon you are trying to trade out is not in your inventory.')
-        
         return redirect(url_for('trading'))
     else:
         for trade in trading_data:
@@ -162,13 +166,50 @@ def trading():
         # Pass the form object to the template along with other data
         return render_template('trading.html', trading_data=trading_data, current_user_pokemon=current_user_pokemon, all_pokemon=all_pokemon, Pokemon=Pokemon)
 
-    
-@app.route('/profile')
+@app.route('/profile', methods=['GET', 'POST'])
 @login_required
 def profile():
-    return render_template('profile/profileManagement.html')
+    form = UpdateAccountForm()
+    if form.validate_on_submit():
+        # Handle form submission logic here if needed
+        pass
+    return render_template('profile/profileManagement.html', username=current_user.username, form=form)
+
+
+# @app.route('/inventory')
+# @login_required
+# def inventory():
+#     return render_template('profile/inventory.html')
+
+# newly added:
 
 @app.route('/inventory')
 @login_required
 def inventory():
-    return render_template('profile/inventory.html')
+    # Fetch the current user's inventory
+    inventory = Inventory.query.filter_by(user_id=current_user.user_id).first()
+    inventory_pokemon = inventory.pokemon_items if inventory else []
+
+    return render_template('/profile/inventory.html', inventory_pokemon=inventory_pokemon, username=current_user.username)
+
+# this is the route that will update you password for a given user:
+@app.route('/update_account', methods=['GET', 'POST'])
+@login_required
+def update_account():
+    form = UpdateAccountForm()
+    if form.validate_on_submit():
+        # Update username if it's different
+        if current_user.username != form.username.data:
+            current_user.username = form.username.data
+        
+        # Update password
+        current_user.password_hash = generate_password_hash(form.password.data)
+        
+        db.session.commit()
+        
+        flash('Your account has been updated! For security reasons, you have been logged out. Please log in with your new credentials.', 'success')
+        logout_user()
+        return redirect(url_for('login'))
+    elif request.method == 'GET':
+        form.username.data = current_user.username
+    return render_template('update_account.html', form=form)

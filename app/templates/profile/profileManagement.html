@@ -1,39 +1,61 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<title>Profile Management</title>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<link rel="stylesheet" href="{{ url_for('static', filename='profileStyles.css') }}"> 
+    <title>Update Account</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="{{ url_for('static', filename='profileStyles.css') }}">
 </head>
 <body>
-
-<div class="topnav">
-  <p id="inventory_name">Inventory</p>
-  <a href="#">Username</a>
-</div>
-
-<div class="sidenav">
-  <a href="profile_management.html">Profile Management</a>
-  <a href="pending_trades.html">Pending Trades</a>
-  <a href="#">Back to Marketplace</a>
-  <a id="logout" href="#">Logout</a>
-</div>
-
-<div class="content">
-  <h1>Profile Management</h1>
-  <form>
-    <div class="form-group">
-      <label for="username">Update Username:</label>
-      <input type="text" id="username" name="username" placeholder="Enter new username">
+    <div class="topnav">
+        <p id="inventory_name">Hey {{ current_user.username }}! </p>
     </div>
-    <div class="form-group">
-      <label for="password">Change Password:</label>
-      <input type="password" id="password" name="password" placeholder="Enter new password">
+    <div class="sidenav">
+      <a href="{{ url_for('inventory') }}">My Inventory</a>
+      <a href="{{ url_for('trading') }}">Back to Marketplace</a>
+      <a href="{{ url_for('catching') }}">Catching Page</a>
+      <a href="{{ url_for('logout') }}">Logout</a>
     </div>
-    <button type="submit">Update Profile</button>
-  </form>
-</div>
-
+    <div class="container">
+        <h1>Profile Management</h1>
+        <form method="POST" action="{{ url_for('update_account') }}">
+            {{ form.hidden_tag() }}
+            <div class="form-group">
+                {{ form.username.label }}
+                {{ form.username(class="form-control") }}
+                {% for error in form.username.errors %}
+                    <span style="color: red;">[{{ error }}]</span>
+                {% endfor %}
+            </div>
+            <div class="form-group">
+                {{ form.password.label }}
+                {{ form.password(class="form-control", type="password") }}
+                {% for error in form.password.errors %}
+                    <span style="color: red;">[{{ error }}]</span>
+                {% endfor %}
+            </div>
+            <div class="form-group">
+                {{ form.confirm_password.label }}
+                {{ form.confirm_password(class="form-control", type="password") }}
+                {% for error in form.confirm_password.errors %}
+                    <span style="color: red;">[{{ error }}]</span>
+                {% endfor %}
+            </div>
+            <div class="form-group">
+                {{ form.submit(class="btn btn-primary") }}
+            </div>
+            <div>
+                {% with messages = get_flashed_messages() %}
+                    {% if messages %}
+                        {% for message in messages %}
+                            <div class="flash-message">
+                                <p>{{ message }}</p>
+                            </div>
+                        {% endfor %}
+                    {% endif %}
+                {% endwith %}
+            </div>
+        </form>
+    </div>
 </body>
 </html>
