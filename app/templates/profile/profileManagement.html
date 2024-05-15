@@ -9,10 +9,10 @@
 </head>
 <body>
     <div class="topnav">
-        <p id="inventory_name">User: long</p>
+        <p id="inventory_name">User: {{ username }} </p>
     </div>
     <div class="sidenav">
-      <a href="{{ url_for('user_inventory') }}">My Inventory</a>
+      <a href="{{ url_for('inventory') }}">My Inventory</a>
       <a href="{{ url_for('trading') }}">Back to Marketplace</a>
       <a href="{{ url_for('logout') }}">Logout</a>
     </div>
