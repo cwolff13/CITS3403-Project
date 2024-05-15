@@ -158,18 +158,9 @@ def profile():
 
 @app.route('/inventory')
 @login_required
-def user_inventory():
-    # Assuming "kaoma" is uniquely identified by username or another identifier
-    user = User.query.filter_by(username="long").first()
-    if user:
-        inventory = Inventory.query.filter_by(user_id=user.user_id).first()
-        inventory_pokemon = inventory.pokemon_items if inventory else []
-    else:
-        inventory_pokemon = []
+def inventory():
+    # Fetch the current user's inventory
+    inventory = Inventory.query.filter_by(user_id=current_user.user_id).first()
+    inventory_pokemon = inventory.pokemon_items if inventory else []
 
-    return render_template('/profile/inventory.html', inventory_pokemon=inventory_pokemon)
-
-
-
-
-
+    return render_template('/profile/inventory.html', inventory_pokemon=inventory_pokemon, username=current_user.username)
