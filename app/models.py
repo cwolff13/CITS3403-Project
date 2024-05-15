@@ -261,8 +261,9 @@ def initialise_database(): # Need to rewrite to instead check integrity of datab
 #         print("Before Deletion: \n")
 #         for i in pokemon_list:
 #             print(i.name)
-    
-    # user1 = User(username="long", password="456", email="long123asd@gmail.com")
+
+#how comment this out
+    # user1 = User(username="long", password_hash="456", email="long123asd@gmail.com")
     # db.session.add(user1)    
     # db.session.commit()
 
@@ -280,7 +281,7 @@ def initialise_database(): # Need to rewrite to instead check integrity of datab
 
     # db.session.commit()
 
-    # user2 = User(username="kaoma", password="123", email="kaoma@gmail.com")
+    # user2 = User(username="kaoma", password_hash="123", email="kaoma@gmail.com")
     # db.session.add(user2)    
     # db.session.commit()
 

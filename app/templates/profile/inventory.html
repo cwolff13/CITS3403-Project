@@ -1,36 +1,108 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<title>CSS Template</title>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<link rel="stylesheet" href="{{ url_for('static', filename='profileStyles.css') }}"> 
+    <title>User Inventory</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/x-icon" href="static/images/pokeball.png">
+    <link rel="stylesheet" href="{{ url_for('static', filename='profileStyles.css') }}">
 </head>
 <body>
+    <div class="topnav">
+        <p id="inventory_name">User: long </p>
 
-<div class="topnav">
-  <p id="inventory_name">Inventory</p>
-  <a href="#">Username</a>
-</div>
-
-<div class="sidenav">
-  <a href="#">Profile Management</a>
-  <a href="#">Pending Trades</a>
-  <a href="#">Back to Marketplace</a>
-  <a id="logout" href="#">Logout</a>
-</div>
-
-<div class="content">
-  <h1><strong>Welcome Back! Your Pokémon Collection Awaits</strong></h1>
-  <p>Your collection so far!!</p>
-  <!-- Inventory items container -->
-  <div class="inventory-items">
-    <div class="inventory-item"><img src="placeholder-image.jpg" alt="Item 1" /></div>
-    <div class="inventory-item"><img src="placeholder-image.jpg" alt="Item 2" /></div>
-    <div class="inventory-item"><img src="placeholder-image.jpg" alt="Item 3" /></div>
-    <!-- ill Add more items as needed -->
+    </div>
+    <div class="sidenav">
+      <a href="{{ url_for('profile') }}">Profile Management</a>
+      <a href="{{ url_for('trading') }}">Back to Marketplace</a>
+      <a href="{{ url_for('logout') }}">Logout</a>
+    </div>
+    <div class="container">
+      <h1>Welcome Back Your Pokemon Collection Awaits</h1>
+      <div class="pokemon-grid">
+          {% for pokemon in inventory_pokemon %}
+          <div class="pokemon-box">
+              <img src="{{ url_for('static', filename=pokemon.poke_url) }}" alt="{{ pokemon.name }}" class="pokemon-img">
+              <p class="pokemon-name">{{ pokemon.name }}</p>
+          </div>
+          {% endfor %}
+      </div>
   </div>
-</div>
-
 </body>
 </html>
+
+<!-- <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/x-icon" href="static/images/pokeball.png">
+    <link rel="stylesheet" href="../styles.css">
+    <title>User Inventory</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-image: url("static/images/pokemonwallpaper.jpg");
+            background-size: cover;
+            background-attachment: fixed;
+        }
+        .container {
+            max-width: 890px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+        }
+        h1, h2 {
+            text-align: center;
+        }
+        .pokemon-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+            gap: 20px;
+        }
+        .pokemon-box {
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            text-align: center;
+            cursor: pointer;
+            transition: border-color 0.3s ease;
+            width: 100px;
+            height: 100px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+        .pokemon-box:hover {
+            border-color: #007bff;
+        }
+        .pokemon-img {
+            max-width: 80px;
+            max-height: 80px;
+            width: auto;
+            height: auto;
+        }
+        .pokemon-name {
+            margin-top: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>User Inventory</h1>
+        <div class="pokemon-grid">
+            {% for pokemon in inventory_pokemon %}
+            <div class="pokemon-box">
+                <img src="{{ url_for('static', filename=pokemon.poke_url) }}" alt="{{ pokemon.name }}" class="pokemon-img">
+                <p class="pokemon-name">{{ pokemon.name }}</p>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</body>
+</html> -->
