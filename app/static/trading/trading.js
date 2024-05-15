@@ -73,13 +73,13 @@ function confirmTradeFinal() {
             // Reset the current selections and close the modal
             currentPokemonToReceive = '';
             currentPokemonToTradeOut = '';
-            
+            alert(data.message); // Display the success message
+            window.location.reload();
         })
         .catch(error => {
             // Handle error
             console.error('Error:', error);
         });
-        window.location.reload()
     } else {
         alert('Please select both Pokémon to trade.');
     }
@@ -94,6 +94,7 @@ function confirmAvailableTrade(tradeId) {
     currentTradeId = tradeId;
     document.getElementById('confirm-available-trade').style.display = 'block';
 }
+
 function confirmAvailableTradeFinal() {
     if (currentTradeId) {
         // Send an AJAX request to delete the trade
@@ -102,22 +103,28 @@ function confirmAvailableTradeFinal() {
         })
         .then(response => {
             if (response.ok) {
-                // If successful, reload the page to reflect changes
-                window.location.reload();
-            } else {
-                // Handle errors
-                console.error('Failed to delete trade');
+                return response.json();
             }
+            throw new Error('Failed to delete trade');
+        })
+        .then(data => {
+            // Handle success response from Flask backend
+            console.log(data);
+            // Display flash message to the user
+            alert(data.message);
+            // If successful, reload the page to reflect changes
+            window.location.reload();
         })
         .catch(error => {
-            // Handle network errors
+            // Handle network errors or errors from the Flask backend
             console.error('Error:', error);
+            // Optionally, display an error message to the user
+            alert('Failed to delete trade');
         });
         // Close the confirmation modal
         closeAvalableTradeConfirmation();
         // Reset the current trade ID
         currentTradeId = null;
-        window.location.reload()
     } else {
         // If no trade ID is selected, show an alert
         alert('Please select a trade.');

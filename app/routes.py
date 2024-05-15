@@ -86,7 +86,7 @@ def catching_pokemon():
     })
 
 @app.route('/trading', methods=['GET', 'POST', 'DELETE'])
-#@login_required
+@login_required
 def trading():
     #current_user = User.query.filter_by(username="long").first()
     trading_data = Trading.query.all()
@@ -114,7 +114,8 @@ def trading():
                               pokemon_trade_in_id=pokemon_to_receive_id, 
                               pokemon_trade_out_id=pokemon_to_trade_out_id)
             # Optionally, you can redirect or render a new template after adding the trade
-            return redirect(url_for('trading'))
+            return jsonify({'success': True, 'message': 'Posting trade success'})
+        return redirect(url_for('trading'))
     elif request.method == 'DELETE':
         trade_available = False
         
@@ -151,12 +152,22 @@ def trading():
             
             Trading.delete_trade(trade_id)
             
+        # else:  
+        #     if (current_user.user_id == user.user_id):
+        #         flash('You cannot trade against yourself', 'warning')
+        #     else:
+        #         flash('The Pokémon you are trying to trade out is not in your inventory.', 'warning')
+        # return redirect(url_for('trading'))
         else:  
+            response_data = {'success': False}
             if (current_user.user_id == user.user_id):
-                flash('You cannot trade against yourself')
+                response_data['message'] = 'You cannot trade against yourself'
             else:
-                flash('The Pokémon you are trying to trade out is not in your inventory.')
-        return redirect(url_for('trading'))
+                response_data['message'] = 'The Pokémon you are trying to trade out is not in your inventory'
+            return jsonify(response_data)
+        
+        response_data = {'success': True, 'message': 'Trade successful'}
+        return jsonify(response_data)
     else:
         for trade in trading_data:
             print(f"Trade ID: {trade.id}, User Name: {trade.user_name}, Trade In ID: {trade.pokemon_trade_in_id}, Trade Out ID: {trade.pokemon_trade_out_id}")
