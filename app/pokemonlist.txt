@@ -26,10 +26,10 @@
 26,Raichu,images/pokemonImages/Raichu.jpg
 27,Sandshrew,images/pokemonImages/Sandshrew.jpg
 28,Sandslash,images/pokemonImages/Sandslash.jpg
-29,Nidoran♀,images/pokemonImages/Nidoran-f.jpg
+29,Nidoran♀,images/pokemonImages/Nidoran♀.jpg
 30,Nidorina,images/pokemonImages/Nidorina.jpg
 31,Nidoqueen,images/pokemonImages/Nidoqueen.jpg
-32,Nidoran♂,images/pokemonImages/Nidoran-m.jpg
+32,Nidoran♂,images/pokemonImages/Nidoran♂.jpg
 33,Nidorino,images/pokemonImages/Nidorino.jpg
 34,Nidoking,images/pokemonImages/Nidoking.jpg
 35,Clefairy,images/pokemonImages/Clefairy.jpg
