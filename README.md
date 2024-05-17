@@ -12,8 +12,7 @@
 **TODO**
 PokeTrade is a marketplace platform that allows users to catch and trade the first generation of Pokemon Characters.
 After logging in and catching their first Pokemon, users can navigate to place trade requests.
-Trades are made by placing a request for a specific Pokemon the user does not have, while offering one of their own Pokemon from their personal inventory.  
-A pokemon in a user's inventory can be posted on multiple trade posts. Trade occurs when a user has a pokemon that the post owner wants and trades on the trade post. Then the corresponding pokemon in the trade post will go to the corresponding inventory user. If a pokemon is not available for trading in the user's inventory, previous trade posts containing that pokemon will be deleted. Users cannot trade with themselves. User cannot trade if they don't have the pokemon post owner want to have.
+Trades are made by placing a request for a specific Pokemon the user does not have, while offering one of their own Pokemon from their personal inventory.  A pokemon in a user's inventory can be posted on multiple trade posts. Trade occurs when a user has a pokemon that the post owner wants and trades on the trade post. Then the corresponding pokemon in the trade post will go to the corresponding inventory user. If a pokemon is not available for trading in the user's inventory, previous trade posts containing that pokemon will be deleted. Users cannot trade with themselves. User cannot trade if they don't have the pokemon post owner want to have.
 
 
 A description of the purpose of the application, explaining the its design and use. **Delete this line when this section is done**
