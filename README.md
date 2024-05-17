@@ -1,4 +1,4 @@
-# CITS3403-Project
+# CITS3403-Project - PokeTrade
 
 ## Team Members
 | UWA ID    | Name           | GitHub Username   |
@@ -10,18 +10,52 @@
 
 ## Project Description
 **TODO**
-A description of the purpose of the application, explaining the its design and use.
+PokeTrade is a marketplace platform that allows users to catch and trade the first generation of Pokemon Characters.
+After logging in and catching their first Pokemon, users can navigate to place trade requests.
+Trades are made by placing a request for a specific Pokemon the user does not have, while offering one of their own Pokemon from their personal inventory. 
+**Can someone extend this to be more specific - still dealing w the Trading bug on my side atm**
+
+A description of the purpose of the application, explaining the its design and use. **Delete this line when this section is done**
 
 ## Architecture
-**TODO**
-A brief summary of the architecture of the application.
+PokeTrade is a Flask web application structured to promote modularity and maintainability. The main components of the application include:
+
+1. **Flask Application**:
+   - The core of PokeTrade, responsible for handling web requests, managing sessions, and rendering templates. `/app` contains the essential components of the PokeTrade product. 
+
+2. **Database**:
+   - A SQLite database (`app.db`) that stores User information, Pokemon inventory, and Trade requests. SQLAlchemy is used as the ORM for database interactions.
+
+3. **User Authentication**:
+   - Managed using Flask-Login, allowing users to register, log in, and manage their sessions securely.
+
+4. **HTML Templates**:
+   - HTML web page templates stored in `app/templates`, which provide interfaces for users to interact with PokeTrade.
+
+5. **Static Files**:
+   - CSS, JavaScript and Image files stored in the `app/static/` directory. These pages add styling and functionality to the aforementioned HTML templates. 
+
+6. **Routes**:
+   - Defined in `app/routes.py`, handling different URL endpoints and associating them with specific functions to process requests and return responses. Renders the HTML Pages. 
+
+7. **Forms**:
+   - Defined in `app/form.py`, managing user input and validation for various forms in the application.
+
+8. **Models**:
+   - Defined in `app/models.py`, representing the data structures of the application and the database schema.
+
+9. **Configuration**:
+   - Application configuration settings are managed in `app/config.py` and environment-specific settings in `env.py`.
+
+10. **Database Migrations**:
+    - Managed using Alembic, with migration scripts and configuration files located in the `migrations/` directory.
 
 ## Launch
 To launch this Flask application, follow these steps:
 
 1. **Set up your environment**:
    - Ensure Python is installed on your system.
-   - Optionally, activate a virtual environment to manage dependencies:
+   - Optionally, activate a virtual environment to best manage dependencies:
      ```bash
      python -m venv venv
      source venv/bin/activate  # On Windows use `venv\Scripts\activate`
