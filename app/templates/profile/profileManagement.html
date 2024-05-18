@@ -12,14 +12,14 @@
         <p id="inventory_name">Hey {{ current_user.username }}! </p>
     </div>
     <div class="sidenav">
-      <a href="{{ url_for('inventory') }}">My Inventory</a>
-      <a href="{{ url_for('trading') }}">Trading</a>
-      <a href="{{ url_for('catching') }}">Catching Page</a>
-      <a href="{{ url_for('logout') }}">Logout</a>
+      <a href="{{ url_for('main.inventory') }}">My Inventory</a>
+      <a href="{{ url_for('main.trading') }}">Trading</a>
+      <a href="{{ url_for('main.catching') }}">Catching Page</a>
+      <a href="{{ url_for('main.logout') }}">Logout</a>
     </div>
     <div class="container">
         <h1>Profile Management</h1>
-        <form method="POST" action="{{ url_for('update_account') }}">
+        <form method="POST" action="{{ url_for('main.update_account') }}">
             {{ form.hidden_tag() }}
             <div class="form-group">
                 {{ form.username.label }}

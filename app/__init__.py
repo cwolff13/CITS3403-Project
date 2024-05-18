@@ -1,25 +1,31 @@
 from flask import Flask
-from .config import Config
 from flask_sqlalchemy import SQLAlchemy
-from flask_migrate import Migrate 
 from flask_login import LoginManager
+from .config import *
 from .db import db
 
-app = Flask(__name__)
-app.config.from_object(Config)
-
-#Database Intialisation.
-db.init_app(app)
-migrate = Migrate(app,db) #Currently no migration set up in current version
-
 # Login Management
-login = LoginManager(app)
+login = LoginManager()
 login.login_view = 'login'
 
-from app import routes, models
+def create_app(config):
+    app = Flask(__name__)
+    app.config.from_object(config)
 
-with app.app_context():
-    models.initialise_database() #Initialises database - function checks to see if database currently exsists
+    #Database Intialisation.
+    db.init_app(app)
+    login.init_app(app)
+    
+    from app.blueprints import main
+    app.register_blueprint(main)
+    
+    with app.app_context():
+        from app.models import initialise_database
+        initialise_database() #Initialises database - function checks to see if database currently exsists
+    return app
+   
+   
+   
 
 
 
