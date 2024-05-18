@@ -1,33 +1,23 @@
-body {
-    
+body {  
     margin: 0;
     padding: 0;
     background-image: url('/static/images/pokemonwallpaper.jpg');
     background-size: cover;
     background-attachment: fixed;
 }
-/* .container {
-    max-width: 890px;
-    margin: 0 auto;
-    padding: 20px;
-    background-color: #fff;
-    border-radius: 8px;
-    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-    position: relative;
-} */
 
 .container {
     width: calc(100% - 200px);
     margin-left: 200px;
-    margin-top: 0; /* Remove the margin-top */
     padding: 20px;
     background-color: #fff;
     box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-    box-sizing: border-box;
-    position: fixed; /* Position the container fixed */
-    top: 0; /* Align the container to the top */
-    bottom: 0; /* Align the container to the bottom */
-    overflow-y: auto; /* Enable vertical scrolling when content overflows */
+    position: fixed;
+    top: 30px; 
+    left: 0; 
+    right: 0; 
+
+    max-height: calc(100vh - 90px); 
 }
 h1, h2, h3 {
     text-align: center;
@@ -50,8 +40,8 @@ h1, h2, h3 {
     box-shadow: 0 2px 6px rgba(0,0,0,0.1);
     max-height: 80%;
     overflow-y: auto;
-    width: 55%; /* Adjust width as needed */
-    height: 70%; /* Adjust height as needed */
+    width: 55%; 
+    height: 70%; 
     z-index: 1000; 
 }
 .close-button {
@@ -86,7 +76,9 @@ h1, h2, h3 {
     display: flex;
     flex-wrap: wrap;
     justify-content: flex-start;
-    gap: 20px;
+    gap: 13.7px;
+    max-height: 400px;
+    overflow-y: auto;
 }
 .pokemon-box {
     padding: 10px;
@@ -112,8 +104,8 @@ h1, h2, h3 {
     text-align: center;
     cursor: pointer;
     transition: border-color 0.3s ease;
-    width: 150px; /* Adjust the width as needed */
-    height: auto; /* Allow the height to adjust based on content */
+    width: 147px; 
+    height: auto;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -135,7 +127,7 @@ h1, h2, h3 {
     border-radius: 8px;
     box-shadow: 0 2px 6px rgba(0,0,0,0.1);
     z-index: 999;
-    width: 200px; /* Adjust the width as needed */
+    width: 180px; 
     height: auto; 
 }
 .confirm-button {
@@ -191,10 +183,10 @@ h1, h2, h3 {
     background-color: #0056b3;
 }
 .pokemon-name {
-    margin-bottom: 5px; /* Adjust the spacing between name and user name */
+    margin-bottom: 5px; 
 }
 
 .user-name {
-    font-size: 16px; /* Increase the font size of the user name */
+    font-size: 16px; 
     color: #666;
 }
