@@ -9,6 +9,7 @@
     <title>Pokemon Trading Page</title>
 </head>
 <body>
+    <!-- Side navigation bar to navigate between pages -->
     <div class="sidenav">
         <a href="{{ url_for('profile') }}">Profile Management</a>
         <a href="{{ url_for('trading') }}">Trading</a>
@@ -18,7 +19,7 @@
     <div class="container">
         <h1>Pokemon Trading Page</h1>
 
-        <!-- Trade Posting Section -->
+        <!-- Trade Posting button -->
         <div class="trade-post">
             <h2>Post a Trade Request</h2>
             <button type="button" class="btn btn-primary" onclick="openTradeModal()">Post Trade</button>
@@ -30,7 +31,7 @@
             <div class="modal-content">
                 <h2>Trade Pokemon</h2>
                 <div class="trade-box">
-                    <!-- Pokemon to receive -->
+                    <!-- Pokemon to receive list -->
                     <div class="pokemon-list">
                         <h3>Select Pokemon to Receive</h3>
                         <div class="pokemon-grid" id="pokemonToReceiveList">
@@ -42,7 +43,7 @@
                             {% endfor %}
                         </div>
                     </div>
-                    <!-- Pokemon to trade out -->
+                    <!-- Pokemon to trade out list -->
                     <div class="pokemon-list">
                         <h3>Select Pokemon to Trade Out</h3>
                         <div class="pokemon-grid" id="pokemonToTradeOutList">
@@ -61,7 +62,7 @@
             </div>
         </div>
 
-        <!-- Confirmation Popup -->
+        <!-- Posting trade-post confirmation Popup -->
         <div id="confirmPopup" class="confirm-popup">
             <div class="popup-content">
                 <h2>Confirm Trade</h2>
@@ -73,7 +74,7 @@
             </div>
         </div>
 
-        <!-- Available Pokemon for Trading -->
+        <!-- Trading post list -->
         <h2>Available Pokemon for Trading</h2>
         <div class="available-pokemon-grid">
             {% for trade in trading_data%}
@@ -88,20 +89,21 @@
                         <img src="{{ url_for('static', filename=pokemon_in.poke_url) }}" alt="{{ pokemon_in.name }}" class="pokemon-img">
                         <p>Trading {{ pokemon_in.name }} for {{ pokemon_out.name }} </p>
                         <div class="confirm-buttons">
-                            <button onclick="confirmAvailableTrade('{{ trade.id }}'), reloadWindow">Trade</button>
+                            <button onclick="confirmAvailableTrade('{{ trade.id }}')">Trade</button>
                         </div>
                     </div>
                 </div>
             {% endfor %}    
         </div>
 
+        <!-- Trading confirmation Popup -->
         <div id="confirm-available-trade" class="confirm-popup">
             <div class="popup-content">
                 <h2>Confirm Trade</h2>
                 <p>Are you sure you want to make this trade?</p>
                 <div class="confirm-buttons">
                     <!-- Confirm button with inline JavaScript -->
-                    <button onclick="confirmAvailableTradeFinal(), reloadWindow" >Confirm</button>
+                    <button onclick="confirmAvailableTradeFinal()" >Confirm</button>
                     <button onclick="closeAvalableTradeConfirmation()">Cancel</button>
                 </div>
             </div>

@@ -88,60 +88,77 @@ def catching_pokemon():
 @app.route('/trading', methods=['GET', 'POST', 'DELETE'])
 @login_required
 def trading():
-    #current_user = User.query.filter_by(username="long").first()
+    #current_user = User.query.filter_by(username="kaoma").first()
+      
+    # Retrieve all trading posts from the trading table.
     trading_data = Trading.query.all()
+    
+    # Get the current user's inventory.
     current_user_inventory = Inventory.query.filter_by(user_id=current_user.user_id).first()
+    
+    # If the current user doesn't have an inventory, show an error message and redirect.
     if not current_user_inventory:
-        # Handle case where user does not have an inventory
         flash('Inventory not found for the current user.')
         return redirect(url_for('inventory'))
     
+    # Get the current user's Pokémon from their inventory.
     current_user_pokemon = current_user_inventory.pokemon_items
+    
+    # Retrieve all Pokémon.
     all_pokemon = Pokemon.query.all()
 
     if request.method == 'POST':
-        # Retrieve the Pokémon names from the form data
+        # Get Pokémon names from the form data submitted via POST request.
         pokemon_to_receive_name = request.form['pokemon_to_receive']
         pokemon_to_trade_out_name = request.form['pokemon_to_trade_out']
         
-        # Find the IDs of the Pokémon
+        # Find the IDs of the Pokémon to receive and trade out.
         pokemon_to_receive_id = Trading.find_pokemon_id(pokemon_to_receive_name)
         pokemon_to_trade_out_id = Trading.find_pokemon_id(pokemon_to_trade_out_name)
         
+        # If both Pokémon IDs are found, add the trade to the database.
         if pokemon_to_receive_id and pokemon_to_trade_out_id:
-            # Add the trade using the IDs
             Trading.add_trade(user_name=current_user.username, 
                               pokemon_trade_in_id=pokemon_to_receive_id, 
                               pokemon_trade_out_id=pokemon_to_trade_out_id)
-            # Optionally, you can redirect or render a new template after adding the trade
             return jsonify({'success': True, 'message': 'Posting trade success'})
         return redirect(url_for('trading'))
     elif request.method == 'DELETE':
+         # Handle the DELETE request to cancel a trade.
         trade_available = False
         
+        # Get the trade ID from the query parameters.
         trade_id = request.args.get('trade_id')
         
+        # Retrieve the trade from the database.
         trade = Trading.query.get(trade_id)
         
+        # Find the user posting the trade.
         user = User.query.filter_by(username=trade.user_name).first()
         
+        # Get the inventory of the user associated with the trade.
         user_inventory = Inventory.query.filter_by(user_id=user.user_id).first()
         
+        # Get the Pokémon IDs involved in the trade.
         pokemon_trade_in = trade.pokemon_trade_in_id
         
         pokemon_trade_out = trade.pokemon_trade_out_id
         
+        # Check if the current user has the Pokémon the other user want to receive their inventory.
         for pokemon in current_user_pokemon:
             if pokemon.id == pokemon_trade_in: 
                 trade_available = True
                 break
-            
+        
+        # If the trade is available and the current user is not the same as the user initiating the trade.
         if (trade_available) and (current_user.user_id != user.user_id):
+             # Delete user's previous trade posts containing pokemon if that pokemon is not available for trading in the user's inventory
             for trades in trading_data:
                 if trades.user_name == user.username and trades.pokemon_trade_out_id == pokemon_trade_out:
                     if user_inventory.get_pokemon_quantity(trades.pokemon_trade_out_id) == 1:
                         Trading.delete_trade(trades.id)
-                        
+            
+            # Update the inventories of both users involved in the trade.            
             user_inventory.add_pokemon(pokemon_trade_in)
             
             current_user_inventory.remove_pokemon(pokemon_trade_in)   
@@ -150,15 +167,12 @@ def trading():
             
             user_inventory.remove_pokemon(pokemon_trade_out)
             
+             # Delete the trade from the database.
             Trading.delete_trade(trade_id)
             
-        # else:  
-        #     if (current_user.user_id == user.user_id):
-        #         flash('You cannot trade against yourself', 'warning')
-        #     else:
-        #         flash('The Pokémon you are trying to trade out is not in your inventory.', 'warning')
-        # return redirect(url_for('trading'))
         else:  
+            # If the current user doesn't have the Pokémon the other user want to receive their inventory or 
+            # the user is trying to trade against themselves, send an error response.
             response_data = {'success': False}
             if (current_user.user_id == user.user_id):
                 response_data['message'] = 'You cannot trade against yourself'
@@ -166,15 +180,17 @@ def trading():
                 response_data['message'] = 'The Pokémon you are trying to trade out is not in your inventory'
             return jsonify(response_data)
         
+        # Send a success response if the trade was successful.
         response_data = {'success': True, 'message': 'Trade successful'}
         return jsonify(response_data)
     else:
+        # For GET requests, print the trading data and the current user's Pokémon to the console (for debugging purposes).
         for trade in trading_data:
             print(f"Trade ID: {trade.id}, User Name: {trade.user_name}, Trade In ID: {trade.pokemon_trade_in_id}, Trade Out ID: {trade.pokemon_trade_out_id}")
         
         for pokemon in current_user_pokemon:
             print(f"pokemon ID: {pokemon.id}")
-        # Pass the form object to the template along with other data
+        # Render the trading template, passing the necessary data to the front end.
         return render_template('trading.html', trading_data=trading_data, current_user_pokemon=current_user_pokemon, all_pokemon=all_pokemon, Pokemon=Pokemon)
 
 @app.route('/profile', methods=['GET', 'POST'])

@@ -70,12 +70,14 @@ class Trading(db.Model):
         def __repr__(self):
                 return f'<{self.user_name} {self.pokemon_trade_in.name} {self.pokemon_trade_out.name}>'
         
+        # Adding new trade function 
         @classmethod
         def add_trade(cls, user_name, pokemon_trade_in_id, pokemon_trade_out_id):
             new_trade = cls(user_name=user_name, pokemon_trade_in_id=pokemon_trade_in_id, pokemon_trade_out_id=pokemon_trade_out_id)
             db.session.add(new_trade)   
             db.session.commit() 
-            
+        
+        # Finding pokemon object via its ID    
         @classmethod
         def find_pokemon_id(cls, pokemon_name):
             pokemon = Pokemon.query.filter_by(name=pokemon_name).first()
@@ -84,14 +86,13 @@ class Trading(db.Model):
             else:
                 return None
         
+        # Deleting existed trade function
         @classmethod
         def delete_trade(cls, trade_id):
             trade = cls.query.get(trade_id)
             if trade:
                 db.session.delete(trade)
                 db.session.commit()
-#Many to many mapping intermediate table
-
 
 inventory_pokemon_association = db.Table('inventory_pokemon',
     db.Column('inventory_id', db.Integer, db.ForeignKey('inventory.inventory_id'), primary_key=True), 
