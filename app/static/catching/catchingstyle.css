@@ -1,39 +1,3 @@
-/* Basic Navigation bar styling, can update when and standardise across pages. */
-#navbar {
-    width: 100%;
-    position: fixed;
-    top: 0;
-    left: 0;
-    background-color: #0075be;
-    color: white;
-    text-align: center;
-    padding: 10px 0;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    z-index: 1000;
-}
-
-#navbar ul {
-    list-style-type: none;
-    padding: 0;
-    margin: 0;
-    display: flex;
-    justify-content: center;
-}
-
-#navbar ul li {
-    margin: 0 20px;
-}
-
-#navbar ul li a {
-    color: white;
-    text-decoration: none;
-    font-size: 16px;
-    font-weight: bold;
-}
-
-#navbar ul li a:hover {
-    color: #ffcb05;
-}
 /*Custom display box */
 .modal {
     display: none;
@@ -52,8 +16,8 @@
     margin: 15% auto;
     padding: 20px;
     border: 1px solid #888;
-    width: 80%;
-    max-width: 300px;
+    width: 100%;
+    max-width: 600px;
     text-align: center;
 }
 
@@ -70,57 +34,67 @@
     text-decoration: none;
     cursor: pointer;
 }
-/*Custom Display box*/
+/*===== End of Custom Display box =====*/
 
-
-/* End of Navbar*/
-
-#summonBoxImage{
-    position: relative;
+/*===== Summon Box ====*/
+.container{
+    display: flex;
+    flex-direction: column; 
+    justify-content: center; 
+    align-items: center; 
+    height: 100vh;
+    width: 100%; 
+}
+    /* Styling for Center Box*/
+.summonBox {
     width: 1000px;
     height: 600px;
     border: 5px solid #3b4cca;
-    display: block;
-    margin-left: auto;
-    margin-right: auto;
-    justify-content: center;
-    align-items: center;
-    border-radius: 10px;
-    box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+    background-image: url('/static/images/summonbox.jpg');
+    background-size: cover;
+    background-position: center;
+    display: flex;  
+    justify-content: center;  
+    align-items: center; 
 }
-
-#pokeballcount{
-    margin-top: 50px;
-    margin-bottom: 50px;
-    margin-right: 150px;
-    margin-left: 40px;
+    /* Styling for pokeball counter*/
+.pokeball-info {
+    background-color: #ffffff;  
+    padding: 10px;  
+    border-radius: 8px; 
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1); 
+    margin-bottom: 20px;  
+    width: auto;  
+    text-align: center;  
+    align-self: flex-start;  
+    border: 2px solid #007BFF;  
+    margin-left: 15vw;
+    font-family: var(--body-font);  
+    font-size: var(--h1-font-size);  
+    color: var(--first-color-dark);  
 }
 
 #pokeball {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    -ms-transform: translate(-50%, -50%);
-    background-color: transparent;
+    border: none;
+    background: transparent;
     cursor: pointer;
-    transition: background-color 0.3s;
+    padding: 0;  
 }
 #pokeball:hover {
     animation: shake 0.6s infinite;
-    
 }
+/*===== End of Summon Box ====*/
+
 /* Animation for pokeball shaking*/
 @keyframes shake {
-    0% { transform: translate(-50%, -50%) translate(1px, 1px) rotate(0deg); }
-    10% { transform: translate(-50%, -50%) translate(-1px, -2px) rotate(-1deg); }
-    20% { transform: translate(-50%, -50%) translate(-3px, 0px) rotate(1deg); }
-    30% { transform: translate(-50%, -50%) translate(3px, 2px) rotate(0deg); }
-    40% { transform: translate(-50%, -50%) translate(1px, -1px) rotate(1deg); }
-    50% { transform: translate(-50%, -50%) translate(-1px, 2px) rotate(-1deg); }
-    60% { transform: translate(-50%, -50%) translate(-3px, 1px) rotate(0deg); }
-    70% { transform: translate(-50%, -50%) translate(3px, 1px) rotate(-1deg); }
-    80% { transform: translate(-50%, -50%) translate(-1px, -1px) rotate(1deg); }
-    90% { transform: translate(-50%, -50%) translate(1px, 2px) rotate(0deg); }
-    100% { transform: translate(-50%, -50%) translate(1px, -2px) rotate(-1deg); }
+    0%, 100% { transform: translate(0, 0) rotate(0deg); }
+    10% { transform: translate(-5px, -5px) rotate(-3deg); }
+    20% { transform: translate(5px, 0) rotate(3deg); }
+    30% { transform: translate(-5px, 5px) rotate(-3deg); }
+    40% { transform: translate(5px, -5px) rotate(3deg); }
+    50% { transform: translate(-5px, 5px) rotate(-3deg); }
+    60% { transform: translate(5px, 0) rotate(3deg); }
+    70% { transform: translate(-5px, -5px) rotate(-3deg); }
+    80% { transform: translate(5px, 5px) rotate(3deg); }
+    90% { transform: translate(0, -5px) rotate(-3deg); }
 }

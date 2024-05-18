@@ -1,16 +1,14 @@
 function summonPokemon(event) {
-    event.stopPropagation();
-    const userId = 1; // Hard-coded user ID for testing
+    event.stopPropagation(); //Stops the button from being spammable
 
+    //Runs cathing-pokemon from routes
     fetch('/catching-pokemon', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
         },
-        body: JSON.stringify({
-            user_id: userId  // Correctly structured JSON body
-        })
     })
+    //Response containing link to pokemon image and user's remaining pokeballs.
     .then(response => response.json())
     .then(data => {
         if (data.success) {
