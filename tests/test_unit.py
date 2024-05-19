@@ -81,3 +81,30 @@ class BasicUnitTests(TestCase):
             self.assertEqual(pokemon.id,1)
             self.assertEqual(pokemon.name, "Bulbasaur")
             self.assertEqual(pokemon.poke_url,"images/pokemonImages/Bulbasaur.jpg")
+
+    def test_trading_post_creation(self):
+        # Create a user instance as needed
+        user = User(username='poketrader', email='trades@traing.com', pokeballs=5)
+        user.set_password('password123')
+        db.session.add(user)
+        db.session.add(Inventory(owner=user))
+        db.session.commit()
+
+        inventory = Inventory.query.filter_by(owner=user).first()
+        inventory.add_pokemon(1)
+        db.session.commit()
+
+        # Programmatically log in the user
+        with self.client:
+            with self.client.session_transaction() as sess:
+                sess['_user_id'] = str(user.user_id)
+                sess['_fresh'] = True  # If you use session freshness in your login_required
+            response = self.client.post('/trading', data={
+                'pokemon_to_receive': 'Charmander',
+                'pokemon_to_trade_out': 'Bulbasaur'
+            }, follow_redirects=True)
+
+        tradingpost = Trading.query.filter_by(user_name = "poketrader").first()
+        
+        self.assertEqual(tradingpost.pokemon_trade_out_id, 1)
+        self.assertEqual(tradingpost.pokemon_trade_in_id, 4)
