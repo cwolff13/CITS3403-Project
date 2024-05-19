@@ -23,9 +23,3 @@ def create_app(config):
         from app.models import initialise_database
         initialise_database() #Initialises database - function checks to see if database currently exsists
     return app
-   
-   
-   
-
-
-

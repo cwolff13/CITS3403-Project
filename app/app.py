@@ -5,4 +5,4 @@ from app.config import DeploymentConfig, Config
 config_setting = DeploymentConfig()
 app = create_app(config_setting)
 
-#migrate = Migrate(app,db) #Currently no migration set up in current version
+migrate = Migrate(app,db)

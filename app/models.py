@@ -1,6 +1,3 @@
-"""
-Module containing model structure for all database tables. You can add your database code below.
-"""
 
 from typing import Optional, List
 import os
@@ -47,7 +44,6 @@ class Pokemon(db.Model):
         except Exception as e:
             print(f"An error occurred: {e}")      
 
-#Long's Trading table
 class Trading(db.Model): 
         id:int = db.Column(db.Integer, primary_key=True, autoincrement=True) 
         user_name:str = db.Column(db.String(100), unique=False)
@@ -176,15 +172,11 @@ class Inventory(db.Model):
             print(f"Error during fetch: {e}")
     
     def get_pokemon_quantity(self, pokemon_id: int) -> int:
-        """
-        Get the quantity of a specific Pokémon in the inventory.
-        """
         association = db.session.query(inventory_pokemon_association).filter_by(inventory_id=self.inventory_id, pokemon_id=pokemon_id).first()
         if association:
             return association.quantity
         return 0
     
-# The User table is responsible for managing User attributes. 
 class User(UserMixin, db.Model):
     __tablename__ = 'user'
     user_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
@@ -220,9 +212,9 @@ def load_user(id):
     return db.session.get(User, int(id))
 
 
-def initialise_database(): # Need to rewrite to instead check integrity of database rather than exsistence.
+def initialise_database(): 
     if not os.path.exists('app.db'): #Checks to see if the database already exsists, Only runs if the database hasn't already been created. 
-        db.create_all() #May need to adjust depending on format of other databases.
+        db.create_all() 
         Pokemon.populate_database()
     
     # Create user inventories to test possible trading functionality scenarios.
@@ -259,6 +251,3 @@ def initialise_database(): # Need to rewrite to instead check integrity of datab
     # inventory2.add_pokemon(8)
 
     # db.session.commit()
-  
-        
-        
