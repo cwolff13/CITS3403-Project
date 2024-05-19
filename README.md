@@ -74,7 +74,12 @@ To launch this Flask application, follow these steps:
      export FLASK_DEBUG=1         # On Windows use `set FLASK_DEBUG=1`
      ```
 
-4. **Run the application**:
+4. **Change Directory into the main App**
+      ```bash
+      cd app
+      ```
+
+5. **Run the application**:
    - Start the Flask server:
      ```bash
      flask run
@@ -82,5 +87,11 @@ To launch this Flask application, follow these steps:
    - Access the application via `http://127.0.0.1:5000/` in your web browser.
 
 ## Tests
-**TODO**
-Instructions for how to run the tests for the application.
+   **Unit Tests:**
+   ```Python
+   python -m unittest discover [options]
+
+   ```
+
+   **Selenium Tests:**
+   Instructions for how to run the Selenium tests TODO.
