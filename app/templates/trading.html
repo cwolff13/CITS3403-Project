@@ -10,11 +10,23 @@
     <title>Pokemon Trading Page</title>
 </head>
 <body>
+    <div class="flash-messages">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                <div class="flash-message {{ category }}">
+                    <p>{{ message }}</p>
+                    <button class="close-btn" aria-label="Close">&times;</button>
+                </div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+    </div>
     <!-- Side navigation bar to navigate between pages -->
     <div class="sidenav">
-        <a href="{{ url_for('main.profile') }}">Profile Management</a>
-        <a href="{{ url_for('main.trading') }}">Trading</a>
-        <a href="{{ url_for('main.catching') }}">Catching Page</a>
+        <a href="{{ url_for('main.catching') }}">Catch Pokemon</a>
+        <a href="{{ url_for('main.inventory') }}">Inventory</a>
+        <a href="{{ url_for('main.profile') }}">Profile</a>
         <a href="{{ url_for('main.logout') }}">Logout</a>
     </div>
     <div class="container">
@@ -23,7 +35,7 @@
         <!-- Trade Posting button -->
         <div class="trade-post">
             <h2>Post a Trade Request</h2>
-            <button type="button" class="btn btn-primary" onclick="openTradeModal()">Post Trade</button>
+            <button type="button" class="style__button" onclick="openTradeModal()">Post Trade</button>
         </div>
 
         <!-- Trade Modal -->

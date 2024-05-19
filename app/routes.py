@@ -20,6 +20,8 @@ def login():
         if user and user.check_password(password):
             login_user(user)
             return redirect(url_for('main.inventory'))
+        else:
+            flash('Incorrect Username or Password', 'danger')
 
     return render_template('login.html')
 
@@ -32,13 +34,14 @@ def signup():
 
         user_exists = User.query.filter((User.username == username) | (User.email == email)).first()
         if user_exists:
-            flash('Username or email already taken')
+            flash('Username or email already taken', 'danger')
         else:
             new_user = User(username=username, email=email, pokeballs=5) # more advanced logic can be added time permitting.
             new_user.set_password(password)
             db.session.add(new_user)
             db.session.commit()
-            flash('User Created Successfully.')
+
+            flash('User Created Successfully.', 'success')
             return redirect(url_for('main.catching'))
 
     return render_template('login.html')
@@ -99,7 +102,7 @@ def trading():
     
     # If the current user doesn't have an inventory, show an error message and redirect.
     if not current_user_inventory:
-        flash('Inventory not found for the current user.')
+        flash('Inventory not found for the current user.', 'danger')
         return redirect(url_for('main.inventory'))
     
     # Get the current user's Pokémon from their inventory.

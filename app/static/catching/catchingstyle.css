@@ -12,7 +12,7 @@
 }
 
 .modal-content {
-    background-color: #fefefe;
+    background-color: var(--first-color-lighten);
     margin: 15% auto;
     padding: 20px;
     border: 1px solid #888;
@@ -36,42 +36,52 @@
 }
 /*===== End of Custom Display box =====*/
 
-/*===== Summon Box ====*/
-.container{
+/* Container class */
+.container {
+    margin-left: 200px;
+    margin-top: 60px;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+    box-sizing: border-box;
     display: flex;
-    flex-direction: column; 
-    justify-content: center; 
-    align-items: center; 
-    height: 100vh;
-    width: 100%; 
+    flex-direction: column;
+    align-items: center;
+    width: 80%; 
+    max-width: 800px;
+    height: 80vh;
 }
-    /* Styling for Center Box*/
+
+/* Styling for Center Box */
 .summonBox {
-    width: 1000px;
-    height: 600px;
+    width: 100%;
+    max-width: 800px;
+    height: max(800px,60vh);
+    padding: 20px;
     border: 5px solid #3b4cca;
     background-image: url('/static/images/summonbox.jpg');
     background-size: cover;
     background-position: center;
-    display: flex;  
-    justify-content: center;  
-    align-items: center; 
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
 }
-    /* Styling for pokeball counter*/
+
+/* Styling for pokeball counter */
 .pokeball-info {
-    background-color: #ffffff;  
-    padding: 10px;  
-    border-radius: 8px; 
-    box-shadow: 0 4px 8px rgba(0,0,0,0.1); 
-    margin-bottom: 20px;  
-    width: auto;  
-    text-align: center;  
-    align-self: flex-start;  
-    border: 2px solid #007BFF;  
-    margin-left: 15vw;
-    font-family: var(--body-font);  
-    font-size: var(--h1-font-size);  
-    color: var(--first-color-dark);  
+    background-color: var(--first-color-lighten);
+    padding: 10px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
+    width: auto;
+    text-align: center;
+    align-self: flex-start;
+    border: 2px solid #007BFF;
+    font-family: var(--body-font);
+    font-size: var(--h1-font-size);
+    color: var(--first-color-dark);
 }
 
 #pokeball {
@@ -83,7 +93,6 @@
 #pokeball:hover {
     animation: shake 0.6s infinite;
 }
-/*===== End of Summon Box ====*/
 
 /* Animation for pokeball shaking*/
 @keyframes shake {

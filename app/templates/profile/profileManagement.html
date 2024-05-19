@@ -12,9 +12,9 @@
         <p id="inventory_name">Hey {{ current_user.username }}! </p>
     </div>
     <div class="sidenav">
-      <a href="{{ url_for('main.inventory') }}">My Inventory</a>
       <a href="{{ url_for('main.trading') }}">Trading</a>
-      <a href="{{ url_for('main.catching') }}">Catching Page</a>
+      <a href="{{ url_for('main.catching') }}">Catch Pokemon</a>
+      <a href="{{ url_for('main.inventory') }}">Inventory</a>
       <a href="{{ url_for('main.logout') }}">Logout</a>
     </div>
     <div class="container">
@@ -43,7 +43,7 @@
                 {% endfor %}
             </div>
             <div class="form-group">
-                {{ form.submit(class="btn btn-primary") }}
+                {{ form.submit(class="style__button") }}
             </div>
             <div>
                 {% with messages = get_flashed_messages() %}

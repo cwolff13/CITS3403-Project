@@ -24,44 +24,11 @@ body {
   top: 0;
   left: 200px; /* Ensure topnav starts right after the sidebar */
   width: calc(100% - 200px); /* Adjust width to start after sidebar */
-  background-color: #ffcb05;
+  background-color: var(--accent-color);
   padding: 8px 16px;
   box-sizing: border-box; /* Include padding in width calculations */
 }
 
-.topnav a {
-  float: right;
-  color: #3050a0;
-  text-align: center;
-  padding: 14px 16px;
-  text-decoration: none;
-  font-size: 17px;
-}
-
-.sidenav {
-  height: 100%;
-  width: 200px;
-  position: fixed;
-  z-index: 1000;
-  top: 0;
-  left: 0;
-  background-color: #3050a0;
-  overflow-x: hidden;
-  padding-top: 20px;
-}
-
-.sidenav a {
-  color: #ffffff;
-  padding: 16px;
-  text-decoration: none;
-  display: block;
-  transition: 0.3s;
-}
-
-.sidenav a:hover {
-  background-color: #dd4040;
-  color: #ffffff;
-}
 
 #logout {
   position: absolute;
@@ -85,21 +52,6 @@ input[type="text"], input[type="password"] {
   padding: 10px;
   border: 1px solid #ddd;
   border-radius: 5px;
-}
-
-button {
-  background-color: #007bff;
-  color: white;
-  border: none;
-  padding: 10px 20px;
-  border-radius: 5px;
-  cursor: pointer;
-  display: block; /* Make the button block level to fill the form */
-  width: 100%;
-}
-
-button:hover {
-  background-color: #0056b3;
 }
 
 .pokemon-grid {

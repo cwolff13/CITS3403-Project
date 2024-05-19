@@ -12,23 +12,32 @@
     </head>
     <body>
         <div class="flash-messages">
-            {% with messages = get_flashed_messages() %}
+            {% with messages = get_flashed_messages(with_categories=true) %}
                 {% if messages %}
-                    {% for message in messages %}
-                        <div class="flash-message">
-                            <p>{{ message }}</p>
-                        </div>
+                    {% for category, message in messages %}
+                    <div class="flash-message {{ category }}">
+                        <p>{{ message }}</p>
+                        <button class="close-btn" aria-label="Close">&times;</button>
+                    </div>
                     {% endfor %}
                 {% endif %}
             {% endwith %}
         </div>
-        <div class="welcome">
-            <h1>Welcome to Our Amazing Platform</h1>
-            <p>Click the button below to get started!</p>
-            <p> TODO! Content here introducing customers to the platform.</p>
-            <button id="get-started" class="login__button">Get Started</button>
-        </div>
-
+        <div class="welcome-container">
+            <div class="welcome">
+                <div class="login__img"></div>
+                <h1>Welcome to PokeTrade</h1>
+                <h3>Catch 'Em All</h3>
+                <p>Dive into the ultimate Pokemon trading experience. Sign up and catch your first Pokemon to start your journey.</p>
+                <h3>Trade Like a Pro</h3>
+                <p>
+                    Got a Pokemon someone else needs? 
+                    Place a trade request and offer one from your collection. 
+                    When another trainer has what you want and you have what they need, the trade is on!
+                </p>
+                <button id="get-started" class="style__button">Get Started</button>
+            </div>
+        </div>        
         <div class="login none">
             <div class="login__content">
                 <div class="login__img"></div>
@@ -47,9 +56,7 @@
                             <input type="password" name="password" placeholder="Password" class="login__input" required>
                         </div>
 
-                        <a href="#" class="login__forgot">Forgot password?</a>
-
-                        <button type="submit" class="login__button">Sign In</button>
+                        <button type="submit" class="style__button">Sign In</button>
 
                         <div>
                             <span class="login__account">Don't have an Account ?</span>
@@ -75,7 +82,7 @@
                             <input type="password" name="password" placeholder="Password" class="login__input" required>
                         </div>
 
-                        <button type="submit" class="login__button">Sign Up</button>
+                        <button type="submit" class="style__button">Sign Up</button>
 
                         <div>
                             <span class="login__account">Already have an Account ?</span>
