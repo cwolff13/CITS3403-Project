@@ -69,14 +69,11 @@ color: #ffffff;
   position: fixed;
   top: 20px;
   right: 20px;
-  width: 300px; /* Adjust width as needed */
+  width: 300px;
   z-index: 1000;
 }
 
 .flash-message {
-  background-color: #f8d7da; 
-  color: #721c24; 
-  border: 1px solid #f5c6cb; 
   border-radius: 8px;
   padding: 15px;
   margin-bottom: 10px;
@@ -96,7 +93,6 @@ color: #ffffff;
   right: 10px;
   background: none;
   border: none;
-  color: #721c24;
   cursor: pointer;
   font-weight: bold;
   font-size: 1.2rem;
@@ -104,11 +100,41 @@ color: #ffffff;
 }
 
 .flash-message .close-btn:hover {
-  color: #491217;
+  color: inherit;
 }
 
 /* Animation for closing the flash message */
 .flash-message.hide {
   opacity: 0;
   transform: translateX(100%);
+}
+
+/* Danger message styles */
+.flash-message.danger {
+  background-color: #f8d7da; 
+  color: #721c24; 
+  border: 1px solid #f5c6cb; 
+}
+
+.flash-message.danger .close-btn {
+  color: #721c24;
+}
+
+.flash-message.danger .close-btn:hover {
+  color: #491217;
+}
+
+/* Success message styles */
+.flash-message.success {
+  background-color: #d4edda; 
+  color: #155724; 
+  border: 1px solid #c3e6cb; 
+}
+
+.flash-message.success .close-btn {
+  color: #155724;
+}
+
+.flash-message.success .close-btn:hover {
+  color: #0b2e13;
 }

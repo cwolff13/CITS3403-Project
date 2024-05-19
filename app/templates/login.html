@@ -12,13 +12,13 @@
     </head>
     <body>
         <div class="flash-messages">
-            {% with messages = get_flashed_messages() %}
+            {% with messages = get_flashed_messages(with_categories=true) %}
                 {% if messages %}
-                    {% for message in messages %}
-                        <div class="flash-message">
-                            <p>{{ message }}</p>
-                            <button class="close-btn" aria-label="Close">&times;</button>
-                        </div>
+                    {% for category, message in messages %}
+                    <div class="flash-message {{ category }}">
+                        <p>{{ message }}</p>
+                        <button class="close-btn" aria-label="Close">&times;</button>
+                    </div>
                     {% endfor %}
                 {% endif %}
             {% endwith %}
@@ -28,7 +28,7 @@
                 <div class="login__img"></div>
                 <h1>Welcome to PokeTrade</h1>
                 <h3>Catch 'Em All</h3>
-                <p>Dive into the ultimate Pokemon trading experience. Start your journey by logging in and catching your first Pokemon.</p>
+                <p>Dive into the ultimate Pokemon trading experience. Sign up and catch your first Pokemon to start your journey.</p>
                 <h3>Trade Like a Pro</h3>
                 <p>
                     Got a Pokemon someone else needs? 
@@ -55,8 +55,6 @@
                             <i class='bx bx-lock-alt login__icon'></i>
                             <input type="password" name="password" placeholder="Password" class="login__input" required>
                         </div>
-
-                        <a href="#" class="login__forgot">Forgot password?</a>
 
                         <button type="submit" class="login__button">Sign In</button>
 
