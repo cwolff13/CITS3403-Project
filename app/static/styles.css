@@ -38,6 +38,24 @@ body, html {
   background-color: var(--first-color-lighten);
 }
 
+/* ==== Styling for Key Buttons ====*/
+.style__button {
+  display: block;
+  width: 100%;
+  background: var(--first-color);
+  color: white;
+  border: none;
+  padding: 15px 20px;
+  cursor: pointer;
+  border-radius: 5px;
+  text-align: center;
+  transition: background 0.3s;
+}
+
+.style__button:hover {
+  background: var(--first-color-dark);
+}
+
 /* ==== Styling for Side Navigation Bar ====*/
 .sidenav {
   height: 100%;
