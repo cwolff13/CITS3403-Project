@@ -74,7 +74,12 @@ To launch this Flask application, follow these steps:
      export FLASK_DEBUG=1         # On Windows use `set FLASK_DEBUG=1`
      ```
 
-4. **Run the application**:
+4. **Change Directory into the main App**
+   ```bash
+   cd app
+   ```
+
+5. **Run the application**:
    - Start the Flask server:
      ```bash
      flask run
