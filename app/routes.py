@@ -1,15 +1,16 @@
 import random
 from flask import render_template, request, redirect, url_for, flash, Flask, request, jsonify
 from flask_login import login_user, login_required, current_user, logout_user
-from app import app, db
+from app import db
+from app.blueprints import main
 from app.models import User, Pokemon, Inventory, Trading
 # imports for the updating users password:
 from app.form import UpdateAccountForm
 from werkzeug.security import generate_password_hash, check_password_hash  
 
 
-@app.route('/')
-@app.route('/login', methods=['GET', 'POST'])
+@main.route('/')
+@main.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
         username = request.form['username']
@@ -18,13 +19,13 @@ def login():
         user = User.query.filter_by(username=username).first()
         if user and user.check_password(password):
             login_user(user)
-            return redirect(url_for('inventory'))
+            return redirect(url_for('main.inventory'))
         else:
             flash('Incorrect Username or Password', 'danger')
 
     return render_template('login.html')
 
-@app.route('/signup', methods=['GET', 'POST'])
+@main.route('/signup', methods=['GET', 'POST'])
 def signup():
     if request.method == 'POST':
         username = request.form['username']
@@ -39,24 +40,25 @@ def signup():
             new_user.set_password(password)
             db.session.add(new_user)
             db.session.commit()
+
             flash('User Created Successfully.', 'success')
-            return redirect(url_for('catching'))
+            return redirect(url_for('main.catching'))
 
     return render_template('login.html')
 
-@app.route('/logout')
+@main.route('/logout')
 def logout():
     logout_user()
     return render_template('login.html')
 
 
-@app.route('/catching')
+@main.route('/catching')
 @login_required
 def catching():
     pokeball_count = current_user.pokeballs
     return render_template('catching.html', pokeball_count=pokeball_count )
 
-@app.route('/catching-pokemon', methods=['POST'])
+@main.route('/catching-pokemon', methods=['POST'])
 @login_required
 def catching_pokemon():
     if current_user.pokeballs < 1:
@@ -87,7 +89,7 @@ def catching_pokemon():
         'newPokeballCount': current_user.pokeballs
     })
 
-@app.route('/trading', methods=['GET', 'POST', 'DELETE'])
+@main.route('/trading', methods=['GET', 'POST', 'DELETE'])
 @login_required
 def trading():
     #current_user = User.query.filter_by(username="kaoma").first()
@@ -101,7 +103,7 @@ def trading():
     # If the current user doesn't have an inventory, show an error message and redirect.
     if not current_user_inventory:
         flash('Inventory not found for the current user.', 'danger')
-        return redirect(url_for('inventory'))
+        return redirect(url_for('main.inventory'))
     
     # Get the current user's Pokémon from their inventory.
     current_user_pokemon = current_user_inventory.pokemon_items
@@ -124,7 +126,7 @@ def trading():
                               pokemon_trade_in_id=pokemon_to_receive_id, 
                               pokemon_trade_out_id=pokemon_to_trade_out_id)
             return jsonify({'success': True, 'message': 'Posting trade success'})
-        return redirect(url_for('trading'))
+        return redirect(url_for('main.trading'))
     elif request.method == 'DELETE':
          # Handle the DELETE request to cancel a trade.
         trade_available = False
@@ -195,7 +197,7 @@ def trading():
         # Render the trading template, passing the necessary data to the front end.
         return render_template('trading.html', trading_data=trading_data, current_user_pokemon=current_user_pokemon, all_pokemon=all_pokemon, Pokemon=Pokemon)
 
-@app.route('/profile', methods=['GET', 'POST'])
+@main.route('/profile', methods=['GET', 'POST'])
 @login_required
 def profile():
     form = UpdateAccountForm()
@@ -212,7 +214,7 @@ def profile():
 
 # newly added:
 
-@app.route('/inventory')
+@main.route('/inventory')
 @login_required
 def inventory():
     # Fetch the current user's inventory
@@ -222,7 +224,7 @@ def inventory():
     return render_template('/profile/inventory.html', inventory_pokemon=inventory_pokemon, username=current_user.username)
 
 # this is the route that will update you password for a given user:
-@app.route('/update_account', methods=['GET', 'POST'])
+@main.route('/update_account', methods=['GET', 'POST'])
 @login_required
 def update_account():
     form = UpdateAccountForm()
@@ -238,7 +240,7 @@ def update_account():
         
         flash('Your account has been updated! For security reasons, you have been logged out. Please log in with your new credentials.', 'success')
         logout_user()
-        return redirect(url_for('login'))
+        return redirect(url_for('main.login'))
     elif request.method == 'GET':
         form.username.data = current_user.username
     return render_template('update_account.html', form=form)
