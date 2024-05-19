@@ -65,28 +65,6 @@
   font-size: var(--normal-font-size);
 }
 
-.login__forgot, .login__button {
-  color: var(--first-color);
-  text-decoration: none;
-}
-
-.login__button {
-  display: block;
-  width: 100%;
-  background: var(--first-color);
-  color: white;
-  border: none;
-  padding: 15px 20px;
-  cursor: pointer;
-  border-radius: 5px;
-  text-align: center;
-  transition: background 0.3s;
-}
-
-.login__button:hover {
-  background: var(--first-color-dark);
-}
-
 .login__account, .login__signin, .login__signup {
   text-align: center;
   display: block;

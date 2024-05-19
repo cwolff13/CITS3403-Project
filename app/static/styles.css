@@ -6,10 +6,14 @@
 /*===== VARIABLES CSS =====*/
 :root {
   /*===== Colors =====*/
-  --first-color: #9D4BFF;
-  --first-color-dark: #23004D;
+  --first-color: #0077e6;
+  --first-color-dark: #002446;
+  --first-color-medium-dark: #00549e;
   --first-color-light: #A49EAC;
   --first-color-lighten: #F2F2F2;
+
+  --accent-color: #ffaa00;
+  --accent-color-vibrant: #ff8c00;
 
   /*===== Font and typography =====*/
   --body-font: 'Open Sans', sans-serif;
@@ -36,6 +40,25 @@ body, html {
   justify-content: center;
   align-items: center;
   background-color: var(--first-color-lighten);
+  color: var(--first-color-dark)
+}
+
+/* ==== Styling for Key Buttons ====*/
+.style__button {
+  display: block;
+  width: 100%;
+  background: var(--first-color);
+  color: white;
+  border: none;
+  padding: 15px 20px;
+  cursor: pointer;
+  border-radius: 5px;
+  text-align: center;
+  transition: background 0.3s;
+}
+
+.style__button:hover {
+  background: var(--first-color-dark);
 }
 
 /* ==== Styling for Side Navigation Bar ====*/
@@ -46,7 +69,7 @@ body, html {
   z-index: 1000;
   top: 0;
   left: 0;
-  background-color: #3050a0;
+  background-color: var(--first-color-medium-dark);
   overflow-x: hidden;
   padding-top: 20px;
 }
@@ -60,8 +83,8 @@ transition: 0.3s;
 }
 
 .sidenav a:hover {
-background-color: #dd4040;
-color: #ffffff;
+background-color: var(--accent-color);
+color: var(--first-color-dark);
 }
 
 /* ===== Flash Messages Styles ===== */
