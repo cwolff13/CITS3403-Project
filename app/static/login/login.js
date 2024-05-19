@@ -32,3 +32,14 @@ signIn.addEventListener('click', ()=>{
     loginIn.classList.toggle('block')
     loginUp.classList.toggle('none')
 })
+
+// Close Button Functionality for Flash Messages
+document.querySelectorAll('.flash-message .close-btn').forEach(button => {
+    button.addEventListener('click', function() {
+        const flashMessage = this.parentElement;
+        flashMessage.classList.add('hide');
+        setTimeout(() => {
+            flashMessage.remove();
+        }, 300); // Match the transition duration
+    });
+});

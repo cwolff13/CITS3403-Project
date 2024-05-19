@@ -19,6 +19,8 @@ def login():
         if user and user.check_password(password):
             login_user(user)
             return redirect(url_for('inventory'))
+        else:
+            flash('Incorrect Username or Password', 'danger')
 
     return render_template('login.html')
 

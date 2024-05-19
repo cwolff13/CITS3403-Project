@@ -17,6 +17,7 @@
                     {% for message in messages %}
                         <div class="flash-message">
                             <p>{{ message }}</p>
+                            <button class="close-btn" aria-label="Close">&times;</button>
                         </div>
                     {% endfor %}
                 {% endif %}
