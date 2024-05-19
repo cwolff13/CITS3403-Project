@@ -12,7 +12,7 @@
 }
 
 .modal-content {
-    background-color: #fefefe;
+    background-color: var(--first-color-lighten);
     margin: 15% auto;
     padding: 20px;
     border: 1px solid #888;
@@ -69,7 +69,7 @@
 
 /* Styling for pokeball counter */
 .pokeball-info {
-    background-color: #ffffff;
+    background-color: var(--first-color-lighten);
     padding: 10px;
     border-radius: 8px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
