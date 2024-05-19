@@ -2,7 +2,8 @@ console.log("hello world");
 
 
 document.getElementById('get-started').addEventListener('click', function() {
-    document.querySelector('.login').classList.toggle('none');
+    document.querySelector('.welcome-container').classList.toggle('none');
+    document.querySelector('.login').classList.toggle('block');
 });
 
 /*===== LOGIN SHOW and HIDDEN =====*/

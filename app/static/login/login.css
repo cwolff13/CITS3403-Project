@@ -2,7 +2,7 @@
 /* ===== Welcome Container Styles ===== */
 .welcome {
   text-align: center;
-  padding: 20px;
+  padding: 30px;
   position: relative;
 }
 
@@ -106,4 +106,33 @@
 
 .block {
   display: block;
+}
+
+/* ===== Welcome Container Styles ===== */
+.welcome-container {
+  width: 100%;
+  max-width: 800px;
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 8px 16px var(--first-color-light);
+  overflow: hidden;
+  text-align: center;
+  padding: 30px;
+  position: relative;
+  margin: 0 auto; /* Center the container horizontally */
+}
+
+.none {
+  display: none;
+}
+
+.block {
+  display: block;
+}
+
+.welcome p {
+  color: var(--first-color-dark);
+  font-size: 1rem;
+  margin-bottom: 30px; 
+  line-height: 1.8; 
 }
