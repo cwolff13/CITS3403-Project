@@ -49,13 +49,14 @@
     align-items: center;
     width: 80%; 
     max-width: 800px;
+    height: 80vh;
 }
 
 /* Styling for Center Box */
 .summonBox {
     width: 100%;
     max-width: 800px;
-    height: auto;
+    height: max(800px,60vh);
     padding: 20px;
     border: 5px solid #3b4cca;
     background-image: url('/static/images/summonbox.jpg');
