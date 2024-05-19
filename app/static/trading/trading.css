@@ -10,7 +10,7 @@ body {
     width: calc(100% - 200px);
     margin-left: 200px;
     padding: 20px;
-    background-color: var(--first-color-lighten);
+    background-color: #fff;
     box-shadow: 0 2px 6px rgba(0,0,0,0.1);
     position: fixed;
     top: 30px; 
@@ -34,7 +34,7 @@ h1, h2, h3 {
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    background-color: var(--first-color-lighten);
+    background-color: #fff;
     padding: 20px;
     border-radius: 8px;
     box-shadow: 0 2px 6px rgba(0,0,0,0.1);
@@ -122,7 +122,7 @@ h1, h2, h3 {
     top: calc(100% + 10px);
     left: 50%;
     transform: translate(-50%, -50%);
-    background-color: var(--first-color-lighten);
+    background-color:#fff;
     padding: 20px;
     border-radius: 8px;
     box-shadow: 0 2px 6px rgba(0,0,0,0.1);
