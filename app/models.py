@@ -225,57 +225,10 @@ def initialise_database(): # Need to rewrite to instead check integrity of datab
         db.create_all() #May need to adjust depending on format of other databases.
         Pokemon.populate_database()
     
-        #For testing
-
-#         user1 = User(username="raymonreddington", password_hash="UWA@", email="kaomak@pokeball.com",pokeballs=99)
-#         user2 = User(username="lizziekeen", password_hash="FB@2024", email="lizzie@pokeball.com",pokeballs=10)
-
-#         db.session.add(user1)
-#         db.session.add(user2)
-#         db.session.commit()
-
-        #print(User.query.filter_by(user_id=1).first())
-#         db.session.add(Inventory(owner=User.query.filter_by(user_id=1).first()))
-#         db.session.commit()
-        #print(Inventory.query.filter_by(user_id=1).first())
-        
-#         inventory1 = Inventory(owner=user1)
-#         inventory2 = Inventory(owner=user2)
-#         db.session.add(inventory1)
-#         db.session.add(inventory2)
-#         db.session.commit()
-
-#         inventory1 = Inventory.query.filter_by(user_id=1).first()
-#         inventory1.add_pokemon(1)
-#         inventory1.add_pokemon(2)
-
-#         inventory2 = Inventory.query.filter_by(user_id=2).first()
-#         inventory2.add_pokemon(3)
-#         inventory2.add_pokemon(4)
-
-#         trading1 = Trading(user_name = "raymonreddington", pokemon_trade_in_id = 1, pokemon_trade_out_id = 7)
-#         db.session.add(trading1)
-#         db.session.commit()
-
-        #print(trading1.user_name,trading1.pokemon_trade_in_id,trading1.pokemon_trade_out_id)
-
-#         pokemon3 = Pokemon.query.get(3)
-        #print(pokemon3.name)
-
-#         pokemon4 = Pokemon.query.filter_by(name = "Bulbasaur").first()
-        #print(pokemon4)
-
-        #print(user1.username)
-
-#         pokemon_list = inventory1.pokemon_items
-#         print("Before Deletion: \n")
-#         for i in pokemon_list:
-#             print(i.name)
-
-    # user1 = User(username="long", password_hash="456", email="long123asd@gmail.com")
-    # db.session.add(user1)    
-    # db.session.commit()
-
+    # Create user inventories to test possible trading functionality scenarios.
+    # Create 2 user with the same name below and uncomment these lines to add pokemon to user's inventory
+    
+    # user1 = User.query.filter_by(username="long").first()
 
     # inventory1 = Inventory(owner=user1)
     # db.session.add(inventory1)
@@ -289,9 +242,9 @@ def initialise_database(): # Need to rewrite to instead check integrity of datab
     # inventory1.add_pokemon(4)
     # inventory1.add_pokemon(5)
 
-    # db.session.commit()
+    # db.session.commit() 
 
-    # user2 = User(username="kaoma", password_hash="123", email="kaoma@gmail.com")
+    # user2 = User.query.filter_by(username="kaoma").first()
     # db.session.add(user2)    
     # db.session.commit()
 
