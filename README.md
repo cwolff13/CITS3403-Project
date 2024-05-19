@@ -74,6 +74,11 @@ To launch this Flask application, follow these steps:
      export FLASK_DEBUG=1         # On Windows use `set FLASK_DEBUG=1`
      ```
 
+   - Set the Secret Key
+      ```bash
+      export SECRET_KEY="your_secure_secret_key"  # On Windows use `set SECRET_KEY=your_secure_secret_key`
+      ```
+
 4. **Change Directory into the main App**
       ```bash
       cd app
