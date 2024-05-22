@@ -6,7 +6,7 @@ from .db import db
 
 # Login Management
 login = LoginManager()
-login.login_view = 'login'
+login.login_view = 'main.login'
 
 def create_app(config):
     app = Flask(__name__)
